@@ -23,15 +23,15 @@ exports.checkStudentStatusNameData = async (student_status_name) => {
 };
 
 // เพิ่มข้อมูลไปยัง Table student_status
-exports.addStudentStatusData = async (data) => {
+exports.addStudentStatusData = async (data, name) => {
     try {
-        const { student_status_name, created_by, updated_by } = data;
+        const { student_status_name } = data;
         const [result] = await db.query(
             `
                 INSERT INTO student_status (student_status_name, created_by, updated_by)
                 VALUES (?, ?, ?)
             `,
-            [student_status_name, created_by, updated_by]
+            [student_status_name, name, name]
         );
         return result.affectedRows > 0; // ส่งกลับ true หากมีการเพิ่มข้อมูล, false หากไม่มี
     } catch (err) {
@@ -52,9 +52,9 @@ exports.checkIdStudentStatusData = async (id) => {
 };
 
 // อัพเดทข้อมูลไปยัง Table student_status
-exports.updateStudentStatusData = async (id, data) => {
+exports.updateStudentStatusData = async (id, data, name) => {
     try {
-        const { student_status_name, updated_by } = data;
+        const { student_status_name } = data;
         const [result] = await db.query(
             `
                 UPDATE student_status 
@@ -63,7 +63,7 @@ exports.updateStudentStatusData = async (id, data) => {
                     updated_by = ?
                 WHERE id = ?
             `,
-            [student_status_name, updated_by, id]
+            [student_status_name, name, id]
         );
         return result.affectedRows > 0; // ส่งกลับ true หากมีการอัพเดทข้อมูล, false หากไม่มี
     } catch (err) {

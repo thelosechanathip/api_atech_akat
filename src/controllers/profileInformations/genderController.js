@@ -26,9 +26,9 @@ exports.getAlldataGender = async (req, res) => {
 // ใช้สำหรับเพิ่มข้อมูล Gender (ข้อมูลเพศ)
 exports.addDataGender = async (req, res) => {
     try {
-        const { gender_name, created_by, updated_by } = req.body;
+        const { gender_name } = req.body;
         // Check ว่ามีการกรอกข้อมูลเข้ามาหรือไม่?
-        if (!gender_name || !created_by || !updated_by) {
+        if (!gender_name) {
             return msg(res, 400, 'กรุณากรอกข้อมูลให้ครบถ้วน');
         }
         // Check gender_name ว่ามีข้อมูลอยู่แล้วในระบบหรือไม่?
@@ -37,7 +37,7 @@ exports.addDataGender = async (req, res) => {
             return msg(res, 409, 'มี (ข้อมูล (gender_name) เพศ) อยู่ในระบบแล้ว ไม่อนุญาตให้บันทึกข้อมูลซ้ำ!');
         }
         // เพิ่มข้อมูลลงในฐานข้อมูล
-        const addGenderDataResult = await addGenderData(req.body);
+        const addGenderDataResult = await addGenderData(req.body, req.name);
         if (addGenderDataResult) {
             return msg(res, 200, 'บันทึกข้อมูลเสร็จสิ้น!');
         } else {
@@ -59,9 +59,9 @@ exports.updateDataGender = async (req, res) => {
             return msg(res, 404, 'ไม่มี (ข้อมูลเพศ) อยู่ในระบบ!');
         }
 
-        const { gender_name, updated_by } = req.body;
+        const { gender_name } = req.body;
         // Check ว่ามีการกรอกข้อมูลเข้ามาหรือไม่?
-        if (!gender_name || !updated_by) {
+        if (!gender_name) {
             return msg(res, 400, 'กรุณากรอกข้อมูลให้ครบถ้วน');
         }
 
@@ -72,7 +72,7 @@ exports.updateDataGender = async (req, res) => {
         }
 
         // อัพเดทข้อมูลลงในฐานข้อมูล
-        const updateGenderDataResult = await updateGenderData(id, req.body);
+        const updateGenderDataResult = await updateGenderData(id, req.body, req.name);
         if (updateGenderDataResult) {
             return msg(res, 200, 'อัพเดทข้อมูลเสร็จสิ้น!');
         } else {

@@ -34,15 +34,15 @@ exports.checkRoleDescription = async (description) => {
 };
 
 // เพิ่มข้อมูลไปยัง Table roles
-exports.addRoleData = async (data) => {
+exports.addRoleData = async (data, name) => {
     try {
-        const { role_name, description, created_by, updated_by } = data;
+        const { role_name, description } = data;
         const [result] = await db.query(
             `
                 INSERT INTO roles (role_name, description, created_by, updated_by)
                 VALUES (?, ?, ?, ?)
             `,
-            [role_name, description, created_by, updated_by]
+            [role_name, description, name, name]
         );
         return result.affectedRows > 0; // ส่งกลับ true หากมีการเพิ่มข้อมูล, false หากไม่มี
     } catch (err) {
@@ -63,9 +63,9 @@ exports.checkIdRoleData = async (id) => {
 };
 
 // อัพเดทข้อมูลไปยัง Table roles
-exports.updateRoleData = async (id, data) => {
+exports.updateRoleData = async (id, data, name) => {
     try {
-        const { role_name, description, updated_by } = data;
+        const { role_name, description } = data;
         const [result] = await db.query(
             `
                 UPDATE roles 
@@ -75,7 +75,7 @@ exports.updateRoleData = async (id, data) => {
                     updated_by = ?
                 WHERE id = ?
             `,
-            [role_name, description, updated_by, id]
+            [role_name, description, name, id]
         );
         return result.affectedRows > 0; // ส่งกลับ true หากมีการอัพเดทข้อมูล, false หากไม่มี
     } catch (err) {

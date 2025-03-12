@@ -23,15 +23,15 @@ exports.checkPrefixNameData = async (prefix_name) => {
 };
 
 // เพิ่มข้อมูลไปยัง Table prefixes
-exports.addPrefixData = async (data) => {
+exports.addPrefixData = async (data, name) => {
     try {
-        const { prefix_name, created_by, updated_by } = data;
+        const { prefix_name } = data;
         const [result] = await db.query(
             `
                 INSERT INTO prefixes (prefix_name, created_by, updated_by)
                 VALUES (?, ?, ?)
             `,
-            [prefix_name, created_by, updated_by]
+            [prefix_name, name, name]
         );
         return result.affectedRows > 0; // ส่งกลับ true หากมีการเพิ่มข้อมูล, false หากไม่มี
     } catch (err) {
@@ -52,9 +52,9 @@ exports.checkIdPrefixData = async (id) => {
 };
 
 // อัพเดทข้อมูลไปยัง Table prefixes
-exports.updatePrefixData = async (id, data) => {
+exports.updatePrefixData = async (id, data, name) => {
     try {
-        const { prefix_name, updated_by } = data;
+        const { prefix_name } = data;
         const [result] = await db.query(
             `
                 UPDATE prefixes 
@@ -63,7 +63,7 @@ exports.updatePrefixData = async (id, data) => {
                     updated_by = ?
                 WHERE id = ?
             `,
-            [prefix_name, updated_by, id]
+            [prefix_name, name, id]
         );
         return result.affectedRows > 0; // ส่งกลับ true หากมีการอัพเดทข้อมูล, false หากไม่มี
     } catch (err) {

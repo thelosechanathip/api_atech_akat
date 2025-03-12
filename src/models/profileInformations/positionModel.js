@@ -23,15 +23,15 @@ exports.checkPositionNameData = async (position_name) => {
 };
 
 // เพิ่มข้อมูลไปยัง Table positions
-exports.addPositionData = async (data) => {
+exports.addPositionData = async (data, name) => {
     try {
-        const { position_name, created_by, updated_by } = data;
+        const { position_name } = data;
         const [result] = await db.query(
             `
                 INSERT INTO positions (position_name, created_by, updated_by)
                 VALUES (?, ?, ?)
             `,
-            [position_name, created_by, updated_by]
+            [position_name, name, name]
         );
         return result.affectedRows > 0; // ส่งกลับ true หากมีการเพิ่มข้อมูล, false หากไม่มี
     } catch (err) {
@@ -52,9 +52,9 @@ exports.checkIdPositionData = async (id) => {
 };
 
 // อัพเดทข้อมูลไปยัง Table positions
-exports.updatePositionData = async (id, data) => {
+exports.updatePositionData = async (id, data, name) => {
     try {
-        const { position_name, updated_by } = data;
+        const { position_name } = data;
         const [result] = await db.query(
             `
                 UPDATE positions 
@@ -63,7 +63,7 @@ exports.updatePositionData = async (id, data) => {
                     updated_by = ?
                 WHERE id = ?
             `,
-            [position_name, updated_by, id]
+            [position_name, name, id]
         );
         return result.affectedRows > 0; // ส่งกลับ true หากมีการอัพเดทข้อมูล, false หากไม่มี
     } catch (err) {

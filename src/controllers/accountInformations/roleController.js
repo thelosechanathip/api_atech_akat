@@ -27,9 +27,9 @@ exports.getAlldataRole = async (req, res) => {
 // ใช้สำหรับเพิ่มข้อมูล Role (ข้อมูลสิทธิ์การใช้งาน)
 exports.addDataRole = async (req, res) => {
     try {
-        const { role_name, description, created_by, updated_by } = req.body;
+        const { role_name, description } = req.body;
         // Check ว่ามีการกรอกข้อมูลเข้ามาหรือไม่?
-        if (!role_name || !description || !created_by || !updated_by) {
+        if (!role_name || !description) {
             return msg(res, 400, 'กรุณากรอกข้อมูลให้ครบถ้วน!');
         }
         // Check role_name ว่ามีข้อมูลอยู่แล้วในระบบหรือไม่?
@@ -43,7 +43,7 @@ exports.addDataRole = async (req, res) => {
             return msg(res, 409, 'มี (ข้อมูล (description) สิทธิ์การใช้งาน) อยู่ในระบบแล้ว ไม่อนุญาตให้บันทึกข้อมูลซ้ำ!');
         }
         // เพิ่มข้อมูลลงในฐานข้อมูล
-        const addRoleDataResult = await addRoleData(req.body);
+        const addRoleDataResult = await addRoleData(req.body, req.name);
         if (addRoleDataResult) {
             return msg(res, 200, 'บันทึกข้อมูลเสร็จสิ้น!');
         } else {
@@ -65,9 +65,9 @@ exports.updateDataRole = async (req, res) => {
             return msg(res, 400, 'ไม่มี (ข้อมูลสิทธิ์การใช้งาน) อยู่ในระบบ!');
         }
 
-        const { role_name, description, updated_by } = req.body;
+        const { role_name, description } = req.body;
         // Check ว่ามีการกรอกข้อมูลเข้ามาหรือไม่?
-        if (!role_name || !description || !updated_by) {
+        if (!role_name || !description) {
             return msg(res, 400, 'กรุณากรอกข้อมูลให้ครบถ้วน');
         }
 
@@ -84,7 +84,7 @@ exports.updateDataRole = async (req, res) => {
         }
 
         // อัพเดทข้อมูลลงในฐานข้อมูล
-        const updateRoleDataResult = await updateRoleData(id, req.body);
+        const updateRoleDataResult = await updateRoleData(id, req.body, req.name);
         if (updateRoleDataResult) {
             return msg(res, 200, 'อัพเดทข้อมูลเสร็จสิ้น!');
         } else {

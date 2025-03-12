@@ -49,6 +49,6 @@ router.delete('/removeTeacherStatus/:id', authCheckAdmin, removeDataTeacherStatu
 router.get('/getEducationLevel', authCheckAdmin, getAlldataEducationLevel);
 router.post('/addEducationLevel', authCheckAdmin, addDataEducationLevel);
 router.put('/updateEducationLevel/:id', authCheckAdmin, updateDataEducationLevel);
-// router.delete('/removeEducationLevel/:id', authCheckAdmin, removeDataEducationLevel);
+router.delete('/removeEducationLevel/:id', authCheckAdmin, removeDataEducationLevel);
 
 module.exports = router;

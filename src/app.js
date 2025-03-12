@@ -19,13 +19,19 @@ app.use(express.json()); // ทำให้สามารถอ่านข้�
 
 // CORS Configuration
 const corsOptions = {
-  origin: process.env.CORS_ORIGIN || "http://atec-inter.ac.th", // เว็บไซต์ที่อนุญาตให้เข้าถึง API
+  origin: '*', // เว็บไซต์ที่อนุญาตให้เข้าถึง API http://atec-inter.ac.th
   methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"], // HTTP Methods ที่อนุญาต
   allowedHeaders: ["Content-Type", "Authorization"], // Headers ที่อนุญาต
   credentials: true, // อนุญาตให้ส่ง Cookies หรือ Credentials
 };
 
 app.use(cors(corsOptions));
+// app.use(
+//   cors({
+//     origin: "http://localhost:5173", // หรือพอร์ตของ Frontend
+//     credentials: true, // ถ้ามีการใช้ Cookies หรือ Authentication
+//   })
+// );
 
 // โหลด apiReference แบบ dynamic import
 app.get('/avenger/spiderman/ironmane/hulk/thor/cap/:text', authAdmin, async (req, res, next) => {

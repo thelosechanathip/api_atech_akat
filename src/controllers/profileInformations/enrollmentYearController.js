@@ -94,7 +94,7 @@ exports.removeDataEnrollmentYear = async (req, res) => {
             return msg(res, 404, 'ไม่มี (ข้อมูลปีการศึกษา) อยู่ในระบบ!');
         }
 
-        const removeEnrollmentYearDataResult = await removeEnrollmentYearData(id, req.body);
+        const removeEnrollmentYearDataResult = await removeEnrollmentYearData(id);
         if (removeEnrollmentYearDataResult) {
             return msg(res, 200, 'ลบข้อมูลเสร็จสิ้น!');
         } else {

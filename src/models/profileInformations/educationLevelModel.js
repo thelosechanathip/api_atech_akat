@@ -83,3 +83,28 @@ exports.updateEducationLevelData = async (id, data, name) => {
         throw new Error("Failed to updateEducationLevelData");
     }
 };
+
+// ลบข้อมูลบน Table education_levels
+exports.removeEducationLevelData = async (id) => {
+    try {
+        // ลบข้อมูลจากตาราง education_levels
+        const [deleteResult] = await db.query('DELETE FROM education_levels WHERE id = ?', [id]);
+
+        // ตรวจสอบว่ามีข้อมูลถูกลบหรือไม่
+        if (deleteResult.affectedRows > 0) {
+            // หาค่า MAX(id) จากตาราง education_levels เพื่อคำนวณค่า AUTO_INCREMENT ใหม่
+            const [maxIdResult] = await db.query('SELECT MAX(id) AS maxId FROM education_levels');
+            const nextAutoIncrement = (maxIdResult[0].maxId || 0) + 1;
+
+            // รีเซ็ตค่า AUTO_INCREMENT
+            await db.query('ALTER TABLE education_levels AUTO_INCREMENT = ?', [nextAutoIncrement]);
+
+            return true; // ส่งค่ากลับเพื่อบอกว่าการลบและรีเซ็ตสำเร็จ
+        }
+
+        return false; // หากไม่มีข้อมูลถูกลบ
+    } catch (err) {
+        console.error('Error while removeEducationLevelData:', err.message);
+        throw new Error('Failed to removeEducationLevelData');
+    }
+};

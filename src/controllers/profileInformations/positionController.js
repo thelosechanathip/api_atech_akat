@@ -26,9 +26,9 @@ exports.getAlldataPosition = async (req, res) => {
 // ใช้สำหรับเพิ่มข้อมูล Position (ข้อมูลตำแหน่ง)
 exports.addDataPosition = async (req, res) => {
     try {
-        const { position_name, created_by, updated_by } = req.body;
+        const { position_name } = req.body;
         // Check ว่ามีการกรอกข้อมูลเข้ามาหรือไม่?
-        if (!position_name || !created_by || !updated_by) {
+        if (!position_name) {
             return msg(res, 400, 'กรุณากรอกข้อมูลให้ครบถ้วน');
         }
         // Check position_name ว่ามีข้อมูลอยู่แล้วในระบบหรือไม่?
@@ -37,7 +37,7 @@ exports.addDataPosition = async (req, res) => {
             return msg(res, 409, 'มี (ข้อมูล (position_name) ตำแหน่ง) อยู่ในระบบแล้ว ไม่อนุญาตให้บันทึกข้อมูลซ้ำ!');
         }
         // เพิ่มข้อมูลลงในฐานข้อมูล
-        const addPositionDataResult = await addPositionData(req.body);
+        const addPositionDataResult = await addPositionData(req.body, req.name);
         if (addPositionDataResult) {
             return msg(res, 200, 'บันทึกข้อมูลเสร็จสิ้น!');
         } else {
@@ -59,9 +59,9 @@ exports.updateDataPosition = async (req, res) => {
             return msg(res, 404, 'ไม่มี (ข้อมูลตำแหน่ง) อยู่ในระบบ!');
         }
 
-        const { position_name, updated_by } = req.body;
+        const { position_name } = req.body;
         // Check ว่ามีการกรอกข้อมูลเข้ามาหรือไม่?
-        if (!position_name || !updated_by) {
+        if (!position_name) {
             return msg(res, 400, 'กรุณากรอกข้อมูลให้ครบถ้วน');
         }
 
@@ -72,7 +72,7 @@ exports.updateDataPosition = async (req, res) => {
         }
 
         // อัพเดทข้อมูลลงในฐานข้อมูล
-        const updatePositionDataResult = await updatePositionData(id, req.body);
+        const updatePositionDataResult = await updatePositionData(id, req.body, req.name);
         if (updatePositionDataResult) {
             return msg(res, 200, 'อัพเดทข้อมูลเสร็จสิ้น!');
         } else {

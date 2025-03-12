@@ -1,6 +1,6 @@
 const app = require("./src/app");
 const db = require("./src/config/db"); // นำเข้าไฟล์เชื่อมต่อฐานข้อมูล
-const PORT = process.env.PORT || 5000;
+const PORT = process.env.PORT || 8000;
 
 // ฟังก์ชันทดสอบการเชื่อมต่อฐานข้อมูล
 async function testDatabaseConnection() {

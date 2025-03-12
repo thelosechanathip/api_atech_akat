@@ -26,9 +26,9 @@ exports.getAlldataStudentStatus = async (req, res) => {
 // ใช้สำหรับเพิ่มข้อมูล StudentStatus (ข้อมูลสถานะนักศึกษา)
 exports.addDataStudentStatus = async (req, res) => {
     try {
-        const { student_status_name, created_by, updated_by } = req.body;
+        const { student_status_name } = req.body;
         // Check ว่ามีการกรอกข้อมูลเข้ามาหรือไม่?
-        if (!student_status_name || !created_by || !updated_by) {
+        if (!student_status_name) {
             return msg(res, 400, 'กรุณากรอกข้อมูลให้ครบถ้วน');
         }
         // Check student_status_name ว่ามีข้อมูลอยู่แล้วในระบบหรือไม่?
@@ -37,7 +37,7 @@ exports.addDataStudentStatus = async (req, res) => {
             return msg(res, 409, 'มี (ข้อมูล (student_status_name) สถานะนักศึกษา) อยู่ในระบบแล้ว ไม่อนุญาตให้บันทึกข้อมูลซ้ำ!');
         }
         // เพิ่มข้อมูลลงในฐานข้อมูล
-        const addStudentStatusDataResult = await addStudentStatusData(req.body);
+        const addStudentStatusDataResult = await addStudentStatusData(req.body, req.name);
         if (addStudentStatusDataResult) {
             return msg(res, 200, 'บันทึกข้อมูลเสร็จสิ้น!');
         } else {
@@ -59,9 +59,9 @@ exports.updateDataStudentStatus = async (req, res) => {
             return msg(res, 404, 'ไม่มี (ข้อมูลสถานะนักศึกษา) อยู่ในระบบ!');
         }
 
-        const { student_status_name, updated_by } = req.body;
+        const { student_status_name } = req.body;
         // Check ว่ามีการกรอกข้อมูลเข้ามาหรือไม่?
-        if (!student_status_name || !updated_by) {
+        if (!student_status_name) {
             return msg(res, 400, 'กรุณากรอกข้อมูลให้ครบถ้วน');
         }
 
@@ -72,7 +72,7 @@ exports.updateDataStudentStatus = async (req, res) => {
         }
 
         // อัพเดทข้อมูลลงในฐานข้อมูล
-        const updateStudentStatusDataResult = await updateStudentStatusData(id, req.body);
+        const updateStudentStatusDataResult = await updateStudentStatusData(id, req.body, req.name);
         if (updateStudentStatusDataResult) {
             return msg(res, 200, 'อัพเดทข้อมูลเสร็จสิ้น!');
         } else {

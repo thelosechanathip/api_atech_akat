@@ -502,6 +502,10 @@
                               "type": "string",
                               "example": "admin"
                             },
+                            "description": {
+                              "type": "string",
+                              "example": "ผู้ดูแลระบบ"
+                            },
                             "created_at": {
                               "type": "string",
                               "format": "date-time",
@@ -623,21 +627,15 @@
                   "properties": {
                     "role_name": {
                       "type": "string",
-                      "example": "DELETE"
+                      "example": "teacher"
                     },
-                    "created_by": {
+                    "description": {
                       "type": "string",
-                      "example": "ADMIN"
-                    },
-                    "updated_by": {
-                      "type": "string",
-                      "example": "ADMIN"
+                      "example": "อาจารย์"
                     }
                   },
                   "required": [
-                    "role_name",
-                    "created_by",
-                    "updated_by"
+                    "role_name"
                   ]
                 }
               }
@@ -765,16 +763,16 @@
                   "properties": {
                     "role_name": {
                       "type": "string",
-                      "example": "DELETE"
+                      "example": "admin"
                     },
-                    "updated_by": {
+                    "description": {
                       "type": "string",
-                      "example": "ADMIN"
+                      "example": "ผู้ดูแลระบบ"
                     }
                   },
                   "required": [
                     "role_name",
-                    "updated_by"
+                    "description"
                   ]
                 }
               }
@@ -2703,7 +2701,7 @@
                             },
                             "prefix_name": {
                               "type": "string",
-                              "example": "admin"
+                              "example": "นาย"
                             },
                             "created_at": {
                               "type": "string",
@@ -2826,21 +2824,11 @@
                   "properties": {
                     "prefix_name": {
                       "type": "string",
-                      "example": "DELETE"
-                    },
-                    "created_by": {
-                      "type": "string",
-                      "example": "ADMIN"
-                    },
-                    "updated_by": {
-                      "type": "string",
-                      "example": "ADMIN"
+                      "example": "นาย"
                     }
                   },
                   "required": [
-                    "prefix_name",
-                    "created_by",
-                    "updated_by"
+                    "prefix_name"
                   ]
                 }
               }
@@ -2968,16 +2956,11 @@
                   "properties": {
                     "prefix_name": {
                       "type": "string",
-                      "example": "DELETE"
-                    },
-                    "updated_by": {
-                      "type": "string",
-                      "example": "ADMIN"
+                      "example": "นาง"
                     }
                   },
                   "required": [
-                    "prefix_name",
-                    "updated_by"
+                    "prefix_name"
                   ]
                 }
               }
@@ -3242,7 +3225,7 @@
                             },
                             "gender_name": {
                               "type": "string",
-                              "example": "admin"
+                              "example": "ชาย"
                             },
                             "created_at": {
                               "type": "string",
@@ -3365,21 +3348,11 @@
                   "properties": {
                     "gender_name": {
                       "type": "string",
-                      "example": "DELETE"
-                    },
-                    "created_by": {
-                      "type": "string",
-                      "example": "ADMIN"
-                    },
-                    "updated_by": {
-                      "type": "string",
-                      "example": "ADMIN"
+                      "example": "หญิง"
                     }
                   },
                   "required": [
-                    "gender_name",
-                    "created_by",
-                    "updated_by"
+                    "gender_name"
                   ]
                 }
               }
@@ -3507,16 +3480,11 @@
                   "properties": {
                     "gender_name": {
                       "type": "string",
-                      "example": "DELETE"
-                    },
-                    "updated_by": {
-                      "type": "string",
-                      "example": "ADMIN"
+                      "example": "ชาย"
                     }
                   },
                   "required": [
-                    "gender_name",
-                    "updated_by"
+                    "gender_name"
                   ]
                 }
               }
@@ -4417,20 +4385,10 @@
                     "position_name": {
                       "type": "string",
                       "example": "ครูชำนาญการพิเศษ"
-                    },
-                    "created_by": {
-                      "type": "string",
-                      "example": "ADMIN"
-                    },
-                    "updated_by": {
-                      "type": "string",
-                      "example": "ADMIN"
                     }
                   },
                   "required": [
-                    "position_name",
-                    "created_by",
-                    "updated_by"
+                    "position_name"
                   ]
                 }
               }
@@ -4559,15 +4517,10 @@
                     "position_name": {
                       "type": "string",
                       "example": "ครูผู้ช่วย"
-                    },
-                    "updated_by": {
-                      "type": "string",
-                      "example": "ADMIN"
                     }
                   },
                   "required": [
-                    "position_name",
-                    "updated_by"
+                    "position_name"
                   ]
                 }
               }
@@ -4946,20 +4899,10 @@
                     "student_status_name": {
                       "type": "string",
                       "example": "ลาออก"
-                    },
-                    "created_by": {
-                      "type": "string",
-                      "example": "ADMIN"
-                    },
-                    "updated_by": {
-                      "type": "string",
-                      "example": "ADMIN"
                     }
                   },
                   "required": [
-                    "student_status_name",
-                    "created_by",
-                    "updated_by"
+                    "student_status_name"
                   ]
                 }
               }
@@ -5088,15 +5031,10 @@
                     "student_status_name": {
                       "type": "string",
                       "example": "ยังเรียนอยู่"
-                    },
-                    "updated_by": {
-                      "type": "string",
-                      "example": "ADMIN"
                     }
                   },
                   "required": [
-                    "student_status_name",
-                    "updated_by"
+                    "student_status_name"
                   ]
                 }
               }
@@ -5475,20 +5413,10 @@
                     "teacher_status_name": {
                       "type": "string",
                       "example": "ลาออก"
-                    },
-                    "created_by": {
-                      "type": "string",
-                      "example": "ADMIN"
-                    },
-                    "updated_by": {
-                      "type": "string",
-                      "example": "ADMIN"
                     }
                   },
                   "required": [
-                    "teacher_status_name",
-                    "created_by",
-                    "updated_by"
+                    "teacher_status_name"
                   ]
                 }
               }
@@ -5617,15 +5545,10 @@
                     "teacher_status_name": {
                       "type": "string",
                       "example": "ยังเรียนอยู่"
-                    },
-                    "updated_by": {
-                      "type": "string",
-                      "example": "ADMIN"
                     }
                   },
                   "required": [
-                    "teacher_status_name",
-                    "updated_by"
+                    "teacher_status_name"
                   ]
                 }
               }
@@ -6081,6 +6004,272 @@
                       "message": {
                         "type": "string",
                         "example": "มี (education_level_abbreviation) อยู่ในระบบแล้ว ไม่อนุญาตให้บันทึกข้อมูลซ้ำ! || มี (education_level_full_name) อยู่ในระบบแล้ว ไม่อนุญาตให้บันทึกข้อมูลซ้ำ!"
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "500": {
+              "description": "ข้อผิดพลาดเซิร์ฟเวอร์",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "object",
+                    "properties": {
+                      "message": {
+                        "type": "string",
+                        "example": "internal server errors"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "/apiv2/updateEducationLevel/{id}": {
+        "put": {
+          "tags": [
+            "EducationLevel"
+          ],
+          "summary": "สำหรับอัพเดทข้อมูล EducationLevel",
+          "description": "สำหรับอัพเดทข้อมูลทั้งหมดของ EducationLevel",
+          "parameters": [
+            {
+              "name": "Authorization",
+              "in": "header",
+              "required": true,
+              "schema": {
+                "type": "string",
+                "example": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+              },
+              "description": "Token จากการล็อกอิน ส่งในรูปแบบ Bearer Token"
+            },
+            {
+              "name": "id",
+              "in": "path",
+              "required": true,
+              "schema": {
+                "type": "integer",
+                "example": 1
+              },
+              "description": "ID ของ EducationLevel ที่ต้องการอัพเดท"
+            }
+          ],
+          "requestBody": {
+            "required": true,
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "education_level_abbreviation": {
+                      "type": "string",
+                      "example": "ยังเรียนอยู่"
+                    },
+                    "education_level_full_name": {
+                      "type": "string",
+                      "example": "ยังเรียนอยู่"
+                    }
+                  },
+                  "required": [
+                    "education_level_abbreviation",
+                    "education_level_full_name"
+                  ]
+                }
+              }
+            }
+          },
+          "responses": {
+            "200": {
+              "description": "ความสำเร็จทั่วไป",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "object",
+                    "properties": {
+                      "message": {
+                        "type": "string",
+                        "example": "อัพเดทข้อมูลเสร็จสิ้น!"
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "400": {
+              "description": "ข้อมูลจาก Client ไม่ถูกต้อง",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "object",
+                    "properties": {
+                      "message": {
+                        "type": "string",
+                        "example": "Tokenไม่อนุญาติให้ใช้งาน! || กรุณากรอกข้อมูลให้ครบถ้วน || อัพเดทข้อมูลไม่สำเร็จ!"
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "401": {
+              "description": "การรับรองความถูกต้องล้มเหลว",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "object",
+                    "properties": {
+                      "message": {
+                        "type": "string",
+                        "example": "ไม่มีการยืนยันตัวตนด้วย OTP กรุณายืนยันตัวตนก่อนใช้งานระบบ!, Token ไม่ถูกต้อง!, Token นี้ไม่มีสิทธิ์การใช้งาน!, TokenExpiredError!, JsonWebTokenError!"
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "404": {
+              "description": "Resource ไม่พบ( Not found )",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "object",
+                    "properties": {
+                      "message": {
+                        "type": "string",
+                        "example": "ไม่มี (ข้อมูลระดับการศึกษา) อยู่ในระบบ!"
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "409": {
+              "description": "สร้างข้อมูลที่ซ้ำกัน",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "object",
+                    "properties": {
+                      "message": {
+                        "type": "string",
+                        "example": "มี (education_level_abbreviation) อยู่ในระบบแล้ว ไม่อนุญาตให้บันทึกข้อมูลซ้ำ! || มี (education_level_full_name) อยู่ในระบบแล้ว ไม่อนุญาตให้บันทึกข้อมูลซ้ำ!"
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "500": {
+              "description": "ข้อผิดพลาดเซิร์ฟเวอร์",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "object",
+                    "properties": {
+                      "message": {
+                        "type": "string",
+                        "example": "internal server errors"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "/apiv2/removeEducationLevel/{id}": {
+        "delete": {
+          "tags": [
+            "EducationLevel"
+          ],
+          "summary": "สำหรับลบข้อมูล EducationLevel",
+          "description": "สำหรับลบข้อมูลทั้งหมดของ EducationLevel",
+          "parameters": [
+            {
+              "name": "Authorization",
+              "in": "header",
+              "required": true,
+              "schema": {
+                "type": "string",
+                "example": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+              },
+              "description": "Token จากการล็อกอิน ส่งในรูปแบบ Bearer Token"
+            },
+            {
+              "name": "id",
+              "in": "path",
+              "required": true,
+              "schema": {
+                "type": "integer",
+                "example": 1
+              },
+              "description": "ID ของ EducationLevel ที่ต้องการลบ"
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "ความสำเร็จทั่วไป",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "object",
+                    "properties": {
+                      "message": {
+                        "type": "string",
+                        "example": "ลบข้อมูลเสร็จสิ้น!"
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "400": {
+              "description": "ข้อมูลจาก Client ไม่ถูกต้อง",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "object",
+                    "properties": {
+                      "message": {
+                        "type": "string",
+                        "example": "Tokenไม่อนุญาติให้ใช้งาน! || ลบข้อมูลไม่สำเร็จ!"
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "401": {
+              "description": "การรับรองความถูกต้องล้มเหลว",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "object",
+                    "properties": {
+                      "message": {
+                        "type": "string",
+                        "example": "ไม่มีการยืนยันตัวตนด้วย OTP กรุณายืนยันตัวตนก่อนใช้งานระบบ!, Token ไม่ถูกต้อง!, Token นี้ไม่มีสิทธิ์การใช้งาน!, TokenExpiredError!, JsonWebTokenError!"
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "404": {
+              "description": "Resource ไม่พบ( Not found )",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "object",
+                    "properties": {
+                      "message": {
+                        "type": "string",
+                        "example": "ไม่มี (ข้อมูลระดับการศึกษา) อยู่ในระบบ!"
                       }
                     }
                   }

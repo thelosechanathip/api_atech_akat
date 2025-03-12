@@ -88,3 +88,24 @@ exports.updateDataEducationLevel = async (req, res) => {
         return msg(res, 500, err.message); // ส่งเฉพาะข้อความข้อผิดพลาด
     }
 };
+
+// ใช้สำหรับลบข้อมูล EducationLevel (ข้อมูลระดับการศึกษา)
+exports.removeDataEducationLevel = async (req, res) => {
+    try {
+        const { id } = req.params;
+
+        // Check ว่ามี ID นี้อยู่ในระบบหรือไม่?
+        const checkIdEducationLevelDataResult = await checkIdEducationLevelData(id);
+        if (!checkIdEducationLevelDataResult) return msg(res, 404, 'ไม่มี (ข้อมูลระดับการศึกษา) อยู่ในระบบ!');
+
+        const removeEducationLevelDataResult = await removeEducationLevelData(id);
+        if (removeEducationLevelDataResult) {
+            return msg(res, 200, 'ลบข้อมูลเสร็จสิ้น!');
+        } else {
+            return msg(res, 400, 'ลบข้อมูลไม่สำเร็จ!');
+        }
+    }catch(err) {
+        console.log(err);
+        return msg(res, 500, err);
+    }
+}

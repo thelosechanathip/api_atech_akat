@@ -26,9 +26,9 @@ exports.getAlldataPrefix = async (req, res) => {
 // ใช้สำหรับเพิ่มข้อมูล Prefix (ข้อมูลคำนำหน้า)
 exports.addDataPrefix = async (req, res) => {
     try {
-        const { prefix_name, created_by, updated_by } = req.body;
+        const { prefix_name } = req.body;
         // Check ว่ามีการกรอกข้อมูลเข้ามาหรือไม่?
-        if (!prefix_name || !created_by || !updated_by) {
+        if (!prefix_name) {
             return msg(res, 400, 'กรุณากรอกข้อมูลให้ครบถ้วน!');
         }
         // Check prefix_name ว่ามีข้อมูลอยู่แล้วในระบบหรือไม่?
@@ -37,7 +37,7 @@ exports.addDataPrefix = async (req, res) => {
             return msg(res, 409, 'มี (ข้อมูล (prefix_name) คำนำหน้า) อยู่ในระบบแล้ว ไม่อนุญาตให้บันทึกข้อมูลซ้ำ!');
         }
         // เพิ่มข้อมูลลงในฐานข้อมูล
-        const addPrefixDataResult = await addPrefixData(req.body);
+        const addPrefixDataResult = await addPrefixData(req.body, req.name);
         if (addPrefixDataResult) {
             return msg(res, 200, 'บันทึกข้อมูลเสร็จสิ้น!');
         } else {
@@ -59,9 +59,9 @@ exports.updateDataPrefix = async (req, res) => {
             return msg(res, 404, 'ไม่มี (ข้อมูลคำนำหน้า) อยู่ในระบบ!');
         }
 
-        const { prefix_name, updated_by } = req.body;
+        const { prefix_name } = req.body;
         // Check ว่ามีการกรอกข้อมูลเข้ามาหรือไม่?
-        if (!prefix_name || !updated_by) {
+        if (!prefix_name) {
             return msg(res, 400, 'กรุณากรอกข้อมูลให้ครบถ้วน');
         }
 
@@ -72,7 +72,7 @@ exports.updateDataPrefix = async (req, res) => {
         }
 
         // อัพเดทข้อมูลลงในฐานข้อมูล
-        const updatePrefixDataResult = await updatePrefixData(id, req.body);
+        const updatePrefixDataResult = await updatePrefixData(id, req.body, req.name);
         if (updatePrefixDataResult) {
             return msg(res, 200, 'อัพเดทข้อมูลเสร็จสิ้น!');
         } else {

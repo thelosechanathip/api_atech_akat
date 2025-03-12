@@ -23,15 +23,15 @@ exports.checkGenderNameData = async (gender_name) => {
 };
 
 // เพิ่มข้อมูลไปยัง Table genders
-exports.addGenderData = async (data) => {
+exports.addGenderData = async (data, name) => {
     try {
-        const { gender_name, created_by, updated_by } = data;
+        const { gender_name } = data;
         const [result] = await db.query(
             `
                 INSERT INTO genders (gender_name, created_by, updated_by)
                 VALUES (?, ?, ?)
             `,
-            [gender_name, created_by, updated_by]
+            [gender_name, name, name]
         );
         return result.affectedRows > 0; // ส่งกลับ true หากมีการเพิ่มข้อมูล, false หากไม่มี
     } catch (err) {
@@ -52,9 +52,9 @@ exports.checkIdGenderData = async (id) => {
 };
 
 // อัพเดทข้อมูลไปยัง Table genders
-exports.updateGenderData = async (id, data) => {
+exports.updateGenderData = async (id, data, name) => {
     try {
-        const { gender_name, updated_by } = data;
+        const { gender_name } = data;
         const [result] = await db.query(
             `
                 UPDATE genders 
@@ -63,7 +63,7 @@ exports.updateGenderData = async (id, data) => {
                     updated_by = ?
                 WHERE id = ?
             `,
-            [gender_name, updated_by, id]
+            [gender_name, name, id]
         );
         return result.affectedRows > 0; // ส่งกลับ true หากมีการอัพเดทข้อมูล, false หากไม่มี
     } catch (err) {

@@ -26,9 +26,9 @@ exports.getAlldataTeacherStatus = async (req, res) => {
 // ใช้สำหรับเพิ่มข้อมูล TeacherStatus (ข้อมูลสถานะอาจารย์)
 exports.addDataTeacherStatus = async (req, res) => {
     try {
-        const { teacher_status_name, created_by, updated_by } = req.body;
+        const { teacher_status_name } = req.body;
         // Check ว่ามีการกรอกข้อมูลเข้ามาหรือไม่?
-        if (!teacher_status_name || !created_by || !updated_by) {
+        if (!teacher_status_name) {
             return msg(res, 400, 'กรุณากรอกข้อมูลให้ครบถ้วน');
         }
         // Check teacher_status_name ว่ามีข้อมูลอยู่แล้วในระบบหรือไม่?
@@ -37,7 +37,7 @@ exports.addDataTeacherStatus = async (req, res) => {
             return msg(res, 409, 'มี (ข้อมูล (teacher_status_name) สถานะอาจารย์) อยู่ในระบบแล้ว ไม่อนุญาตให้บันทึกข้อมูลซ้ำ!');
         }
         // เพิ่มข้อมูลลงในฐานข้อมูล
-        const addTeacherStatusDataResult = await addTeacherStatusData(req.body);
+        const addTeacherStatusDataResult = await addTeacherStatusData(req.body, req.name);
         if (addTeacherStatusDataResult) {
             return msg(res, 200, 'บันทึกข้อมูลเสร็จสิ้น!');
         } else {
@@ -59,9 +59,9 @@ exports.updateDataTeacherStatus = async (req, res) => {
             return msg(res, 404, 'ไม่มี (ข้อมูลสถานะอาจารย์) อยู่ในระบบ!');
         }
 
-        const { teacher_status_name, updated_by } = req.body;
+        const { teacher_status_name } = req.body;
         // Check ว่ามีการกรอกข้อมูลเข้ามาหรือไม่?
-        if (!teacher_status_name || !updated_by) {
+        if (!teacher_status_name) {
             return msg(res, 400, 'กรุณากรอกข้อมูลให้ครบถ้วน');
         }
 
@@ -72,7 +72,7 @@ exports.updateDataTeacherStatus = async (req, res) => {
         }
 
         // อัพเดทข้อมูลลงในฐานข้อมูล
-        const updateTeacherStatusDataResult = await updateTeacherStatusData(id, req.body);
+        const updateTeacherStatusDataResult = await updateTeacherStatusData(id, req.body, req.name);
         if (updateTeacherStatusDataResult) {
             return msg(res, 200, 'อัพเดทข้อมูลเสร็จสิ้น!');
         } else {
