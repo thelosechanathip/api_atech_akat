@@ -28,14 +28,12 @@ exports.addDataEnrollmentYear = async (req, res) => {
     try {
         const { enrollment_year_name } = req.body;
         // Check ว่ามีการกรอกข้อมูลเข้ามาหรือไม่?
-        if (!enrollment_year_name) {
-            return msg(res, 400, 'กรุณากรอกข้อมูลให้ครบถ้วน');
-        }
+        if (!enrollment_year_name) return msg(res, 400, 'กรุณากรอกข้อมูลให้ครบถ้วน');
+
         // Check enrollment_year_name ว่ามีข้อมูลอยู่แล้วในระบบหรือไม่?
         const checkEnrollmentYearNameDataResult = await checkEnrollmentYearNameData(enrollment_year_name);
-        if (checkEnrollmentYearNameDataResult) {
-            return msg(res, 409, 'มี (ข้อมูล (enrollment_year_name) ปีการศึกษา) อยู่ในระบบแล้ว ไม่อนุญาตให้บันทึกข้อมูลซ้ำ!');
-        }
+        if (checkEnrollmentYearNameDataResult) return msg(res, 409, 'มี (enrollment_year_name) อยู่ในระบบแล้ว ไม่อนุญาตให้บันทึกข้อมูลซ้ำ!');
+
         // เพิ่มข้อมูลลงในฐานข้อมูล
         const addEnrollmentYearDataResult = await addEnrollmentYearData(req.body, req.name);
         if (addEnrollmentYearDataResult) {
@@ -55,21 +53,15 @@ exports.updateDataEnrollmentYear = async (req, res) => {
         const { id } = req.params;
         // Check ว่ามี ID นี้อยู่ในระบบหรือไม่?
         const checkIdEnrollmentYearDataResult = await checkIdEnrollmentYearData(id);
-        if (!checkIdEnrollmentYearDataResult) {
-            return msg(res, 404, 'ไม่มี (ข้อมูลปีการศึกษา) อยู่ในระบบ!');
-        }
+        if (!checkIdEnrollmentYearDataResult) return msg(res, 404, 'ไม่มี (ข้อมูลปีการศึกษา) อยู่ในระบบ!');
 
-        const { enrollment_year_name, updated_by } = req.body;
+        const { enrollment_year_name } = req.body;
         // Check ว่ามีการกรอกข้อมูลเข้ามาหรือไม่?
-        if (!enrollment_year_name || !updated_by) {
-            return msg(res, 400, 'กรุณากรอกข้อมูลให้ครบถ้วน');
-        }
+        if (!enrollment_year_name) return msg(res, 400, 'กรุณากรอกข้อมูลให้ครบถ้วน');
 
         // Check enrollment_year_name ว่ามีข้อมูลอยู่แล้วในระบบหรือไม่?
         const checkEnrollmentYearNameDataResult = await checkEnrollmentYearNameData(enrollment_year_name);
-        if (checkEnrollmentYearNameDataResult) {
-            return msg(res, 409, 'มี (ข้อมูล (enrollment_year_name) ปีการศึกษา) อยู่ในระบบแล้ว ไม่อนุญาตให้บันทึกข้อมูลซ้ำ!');
-        }
+        if (checkEnrollmentYearNameDataResult) return msg(res, 409, 'มี (enrollment_year_name) อยู่ในระบบแล้ว ไม่อนุญาตให้บันทึกข้อมูลซ้ำ!');
 
         // อัพเดทข้อมูลลงในฐานข้อมูล
         const updateEnrollmentYearDataResult = await updateEnrollmentYearData(id, req.body, req.name);
@@ -88,11 +80,10 @@ exports.updateDataEnrollmentYear = async (req, res) => {
 exports.removeDataEnrollmentYear = async (req, res) => {
     try {
         const { id } = req.params;
+        
         // Check ว่ามี ID นี้อยู่ในระบบหรือไม่?
         const checkIdEnrollmentYearDataResult = await checkIdEnrollmentYearData(id);
-        if (!checkIdEnrollmentYearDataResult) {
-            return msg(res, 404, 'ไม่มี (ข้อมูลปีการศึกษา) อยู่ในระบบ!');
-        }
+        if (!checkIdEnrollmentYearDataResult) return msg(res, 404, 'ไม่มี (ข้อมูลปีการศึกษา) อยู่ในระบบ!');
 
         const removeEnrollmentYearDataResult = await removeEnrollmentYearData(id);
         if (removeEnrollmentYearDataResult) {

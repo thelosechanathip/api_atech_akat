@@ -7,7 +7,7 @@ exports.fetchEnrollmentYearData = async () => {
         return rows; // ส่งคืนข้อมูลที่ได้จากฐานข้อมูล
     } catch (err) {
         console.error(err.message);
-        throw new Error("Failed to fetch enrollment year data");
+        throw new Error("Failed to fetchEnrollmentYearData");
     }
 };
 
@@ -18,7 +18,7 @@ exports.checkEnrollmentYearNameData = async (enrollment_year_name) => {
         return rows.length > 0; // ส่งกลับ true หากพบข้อมูล, false หากไม่พบ
     } catch (err) {
         console.error(err.message);
-        throw new Error("Failed to check enrollment_year_name data");
+        throw new Error("Failed to checkEnrollmentYearNameData");
     }
 };
 
@@ -36,7 +36,7 @@ exports.addEnrollmentYearData = async (data, name) => {
         return result.affectedRows > 0; // ส่งกลับ true หากมีการเพิ่มข้อมูล, false หากไม่มี
     } catch (err) {
         console.error(err.message);
-        throw new Error("Failed to add enrollment year data");
+        throw new Error("Failed to addEnrollmentYearData");
     }
 };
 
@@ -92,7 +92,7 @@ exports.removeEnrollmentYearData = async (id) => {
 
         return false; // หากไม่มีข้อมูลถูกลบ
     } catch (err) {
-        console.error('Error while removing enrollment year data:', err.message);
-        throw new Error('Failed to remove enrollment year data');
+        console.error('Error while removeEnrollmentYearData:', err.message);
+        throw new Error('Failed to removeEnrollmentYearData');
     }
 };
