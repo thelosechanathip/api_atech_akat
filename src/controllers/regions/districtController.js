@@ -1,5 +1,6 @@
 const {
     fetchDistrictData,
+    fetchDistrictsDataByProvinceId,
     checkDistrictCodeData,
     checkDistrictNameInThaiData,
     checkDistrictNameInEnglishData,
@@ -13,13 +14,28 @@ const {
 const { msg } = require('../../utils/message');
 
 // ใช้สำหรับดึงข้อมูล District (ข้อมูลอำเภอ)
-exports.getAlldataDistrict = async(req, res) => {
+exports.getAllDataDistrict = async(req, res) => {
     try {
         const fetchDistrictDataResult = await fetchDistrictData();
         if (!Array.isArray(fetchDistrictDataResult) || fetchDistrictDataResult.length === 0) {
             return msg(res, 404, "No data found");
         }
         return msg(res, 200, fetchDistrictDataResult);
+    } catch(err) {
+        console.log(err);
+        return msg(res, 500, err.message);
+    }
+}
+
+// ใช้สำหรับดึงข้อมูล District (ข้อมูลอำเภอ) ที่อ้างอิงจาก province_id
+exports.getDistrictsDataByProvinceId = async (req, res) => {
+    try {
+        const { province_id } = req.body;
+        if(!province_id) return msg(res, 400, 'กรุณากรอกข้อมูลให้ครบถ้วน!');
+        const fetchDistrictsDataByProvinceIdResult = await fetchDistrictsDataByProvinceId(province_id);
+        if (!Array.isArray(fetchDistrictsDataByProvinceIdResult) || fetchDistrictsDataByProvinceIdResult.length === 0) return msg(res, 404, "No data found");
+
+        return msg(res, 200, fetchDistrictsDataByProvinceIdResult);
     } catch(err) {
         console.log(err);
         return msg(res, 500, err.message);

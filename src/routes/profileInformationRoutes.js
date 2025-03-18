@@ -18,6 +18,7 @@ const { getAlldataRelations, addDataRelation, updateDataRelation, removeDataRela
 const { getAlldataReligions, addDataReligion, updateDataReligion, removeDataReligion } = require('../controllers/profileInformations/religionController');
 const { getAlldataSpecializations, addDataSpecialization, updateDataSpecialization, removeDataSpecialization } = require('../controllers/profileInformations/specializationController');
 const { getAlldataCourses, addDataCourses, updateDataCourses, removeDataCourses } = require('../controllers/profileInformations/coursesController');
+const { getAllDataEducationalInstitutions, addDataEducationalInstitution, updateDataEducationalInstitution, removeDataEducationalInstitution } = require('../controllers/profileInformations/educationalInstitutionController');
 
 // @ENDPOINT = http://localhost:8000/apiv2/enrollmentYear { enrollmentYear }
 router.get('/getEnrollmentYear', authCheckAdmin, getAlldataEnrollmentYear);
@@ -121,5 +122,11 @@ router.get('/getCourses', authCheckAdmin, getAlldataCourses);
 router.post('/addCourses', authCheckAdmin, addDataCourses);
 router.put('/updateCourses/:id', authCheckAdmin, updateDataCourses);
 router.delete('/removeCourses/:id', authCheckAdmin, removeDataCourses);
+
+// @ENDPOINT = http://localhost:8000/apiv2/EducationalInstitution { EducationalInstitution }
+router.get('/getEducationalInstitutions', authCheckAdmin, getAllDataEducationalInstitutions);
+router.post('/addEducationalInstitution', authCheckAdmin, addDataEducationalInstitution);
+router.put('/updateEducationalInstitution/:id', authCheckAdmin, updateDataEducationalInstitution);
+router.delete('/removeEducationalInstitution/:id', authCheckAdmin, removeDataEducationalInstitution);
 
 module.exports = router;

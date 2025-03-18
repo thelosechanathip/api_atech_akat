@@ -103,6 +103,10 @@
       {
         "name": "Courses",
         "description": "Endpoints สำหรับการจัดการตาราง courses( ตารางเก็บข้อมูลหมวดหมู่วิชา( ตัวอย่าง: ( บริหารธุรกิจ, การเงินและบัญชี, การบัญชี, 2( ปวช. ) ) ) )"
+      },
+      {
+        "name": "EducationalInstitution",
+        "description": "Endpoints สำหรับการจัดการตาราง educational_institutions( ตารางเก็บข้อมูลชื่อสถานที่ศึกษา( ตัวอย่าง: ( ราชภัฏสกลนคร, 1 ) ) )"
       }
     ],
     "paths": {
@@ -1700,6 +1704,152 @@
           }
         }
       },
+      "/apiv2/getDistrictByProvinceId": {
+        "post": {
+          "tags": [
+            "District"
+          ],
+          "summary": "สำหรับดึงข้อมูล District ที่อ้างอิงจาก ProvinceId ที่ส่งเข้ามา",
+          "description": "สำหรับดึงข้อมูลทั้งหมดของ District ที่อ้างอิงจาก ProvinceId ที่ส่งเข้ามา",
+          "parameters": [
+            {
+              "name": "Authorization",
+              "in": "header",
+              "required": true,
+              "schema": {
+                "type": "string",
+                "example": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+              },
+              "description": "Token จากการล็อกอิน ส่งในรูปแบบ Bearer Token"
+            }
+          ],
+          "requestBody": {
+            "required": true,
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "province_id": {
+                      "type": "int",
+                      "example": "1"
+                    }
+                  },
+                  "required": [
+                    "province_id"
+                  ]
+                }
+              }
+            }
+          },
+          "responses": {
+            "200": {
+              "description": "ความสำเร็จทั่วไป",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "object",
+                    "properties": {
+                      "message": {
+                        "type": "array",
+                        "items": {
+                          "type": "object",
+                          "properties": {
+                            "id": {
+                              "type": "integer",
+                              "example": 1
+                            },
+                            "code": {
+                              "type": "smallint",
+                              "example": "1001"
+                            },
+                            "name_in_thai": {
+                              "type": "string",
+                              "example": "เขต พระนคร"
+                            },
+                            "name_in_english": {
+                              "type": "string",
+                              "example": "Phra Nakon"
+                            },
+                            "province_id": {
+                              "type": "int",
+                              "example": "1"
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "400": {
+              "description": "ข้อมูลจาก Client ไม่ถูกต้อง",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "object",
+                    "properties": {
+                      "message": {
+                        "type": "string",
+                        "example": "Tokenไม่อนุญาติให้ใช้งาน! || กรุณากรอกข้อมูลให้ครบถ้วน!"
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "401": {
+              "description": "การรับรองความถูกต้องล้มเหลว",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "object",
+                    "properties": {
+                      "message": {
+                        "type": "string",
+                        "example": "ไม่มีการยืนยันตัวตนด้วย OTP กรุณายืนยันตัวตนก่อนใช้งานระบบ! || Token ไม่ถูกต้อง! || Token นี้ไม่มีสิทธิ์การใช้งาน! || TokenExpiredError! || JsonWebTokenError!"
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "404": {
+              "description": "Resource ไม่พบ( Not found )",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "object",
+                    "properties": {
+                      "message": {
+                        "type": "string",
+                        "example": "No data found"
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "500": {
+              "description": "ข้อผิดพลาดเซิร์ฟเวอร์",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "object",
+                    "properties": {
+                      "message": {
+                        "type": "string",
+                        "example": "internal server errors"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
       "/apiv2/addDistrict": {
         "post": {
           "tags": [
@@ -2227,6 +2377,164 @@
             },
             "404": {
               "description": "Resource ไม่พบ",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "object",
+                    "properties": {
+                      "message": {
+                        "type": "string",
+                        "example": "No data found"
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "500": {
+              "description": "ข้อผิดพลาดเซิร์ฟเวอร์",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "object",
+                    "properties": {
+                      "message": {
+                        "type": "string",
+                        "example": "internal server errors"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "/apiv2/getSubDistrictByDistrictId": {
+        "post": {
+          "tags": [
+            "SubDistrict"
+          ],
+          "summary": "สำหรับดึงข้อมูล SubDistrict ที่อ้างอิงจาก DistrictId ที่ส่งเข้ามา",
+          "description": "สำหรับดึงข้อมูลทั้งหมดของ SubDistrict ที่อ้างอิงจาก DistrictId ที่ส่งเข้ามา",
+          "parameters": [
+            {
+              "name": "Authorization",
+              "in": "header",
+              "required": true,
+              "schema": {
+                "type": "string",
+                "example": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+              },
+              "description": "Token จากการล็อกอิน ส่งในรูปแบบ Bearer Token"
+            }
+          ],
+          "requestBody": {
+            "required": true,
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "district_id": {
+                      "type": "int",
+                      "example": "1"
+                    }
+                  },
+                  "required": [
+                    "district_id"
+                  ]
+                }
+              }
+            }
+          },
+          "responses": {
+            "200": {
+              "description": "ความสำเร็จทั่วไป",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "object",
+                    "properties": {
+                      "message": {
+                        "type": "array",
+                        "items": {
+                          "type": "object",
+                          "properties": {
+                            "id": {
+                              "type": "integer",
+                              "example": 1
+                            },
+                            "code": {
+                              "type": "smallint",
+                              "example": "100101"
+                            },
+                            "name_in_thai": {
+                              "type": "string",
+                              "example": "พระบรมมหาราชวัง"
+                            },
+                            "name_in_english": {
+                              "type": "string",
+                              "example": "Phra Borom Maha Ratchawang"
+                            },
+                            "latitude": {
+                              "type": "float",
+                              "example": "13.751"
+                            },
+                            "longitude": {
+                              "type": "float",
+                              "example": "100.492"
+                            },
+                            "district_id": {
+                              "type": "int",
+                              "example": "1"
+                            },
+                            "zip_code": {
+                              "type": "int",
+                              "example": "10200"
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "400": {
+              "description": "ข้อมูลจาก Client ไม่ถูกต้อง",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "object",
+                    "properties": {
+                      "message": {
+                        "type": "string",
+                        "example": "Tokenไม่อนุญาติให้ใช้งาน! || กรุณากรอกข้อมูลให้ครบถ้วน"
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "401": {
+              "description": "การรับรองความถูกต้องล้มเหลว",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "object",
+                    "properties": {
+                      "message": {
+                        "type": "string",
+                        "example": "ไม่มีการยืนยันตัวตนด้วย OTP กรุณายืนยันตัวตนก่อนใช้งานระบบ! || Token ไม่ถูกต้อง! || Token นี้ไม่มีสิทธิ์การใช้งาน! || TokenExpiredError! || JsonWebTokenError!"
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "404": {
+              "description": "Resource ไม่พบ( Not found )",
               "content": {
                 "application/json": {
                   "schema": {
@@ -11522,6 +11830,437 @@
                       "message": {
                         "type": "string",
                         "example": "ไม่มี (ข้อมูลหมวดหมู่วิชา) อยู่ในระบบ!"
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "500": {
+              "description": "ข้อผิดพลาดเซิร์ฟเวอร์",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "object",
+                    "properties": {
+                      "message": {
+                        "type": "string",
+                        "example": "internal server errors"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "/apiv2/getEducationalInstitutions": {
+        "get": {
+          "tags": [
+            "EducationalInstitution"
+          ],
+          "summary": "สำหรับดึงข้อมูล EducationalInstitution",
+          "description": "สำหรับดึงข้อมูลทั้งหมดของ EducationalInstitution",
+          "parameters": [
+            {
+              "name": "Authorization",
+              "in": "header",
+              "required": true,
+              "schema": {
+                "type": "string",
+                "example": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+              },
+              "description": "Token จากการล็อกอิน ส่งในรูปแบบ Bearer Token"
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "ความสำเร็จทั่วไป",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "object",
+                    "properties": {
+                      "message": {
+                        "type": "array",
+                        "items": {
+                          "type": "object",
+                          "properties": {
+                            "id": {
+                              "type": "integer",
+                              "example": 1
+                            },
+                            "educational_institution_name": {
+                              "type": "string",
+                              "example": "ราชภัฏสกลนคร"
+                            },
+                            "institution_id": {
+                              "type": "int",
+                              "example": 1
+                            },
+                            "created_at": {
+                              "type": "timestamp",
+                              "example": "2025-03-06 21:34:25"
+                            },
+                            "created_by": {
+                              "type": "string",
+                              "example": "admin"
+                            },
+                            "updated_at": {
+                              "type": "timestamp",
+                              "example": "2025-03-06 21:34:25"
+                            },
+                            "updated_by": {
+                              "type": "string",
+                              "example": "admin"
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "400": {
+              "description": "Server ไม่สามารถประมวลผลคำร้องขอเนื่องจากข้อผิดพลาดของ Client",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "object",
+                    "properties": {
+                      "message": {
+                        "type": "string",
+                        "example": "Tokenไม่อนุญาติให้ใช้งาน!"
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "401": {
+              "description": "การรับรองความถูกต้องล้มเหลว",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "object",
+                    "properties": {
+                      "message": {
+                        "type": "string",
+                        "example": "ไม่มีการยืนยันตัวตนด้วย OTP กรุณายืนยันตัวตนก่อนใช้งานระบบ! || Token ไม่ถูกต้อง! || Token นี้ไม่มีสิทธิ์การใช้งาน! || TokenExpiredError! || JsonWebTokenError!"
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "404": {
+              "description": "Resource ไม่พบ",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "object",
+                    "properties": {
+                      "message": {
+                        "type": "string",
+                        "example": "No data found"
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "500": {
+              "description": "ข้อผิดพลาดเซิร์ฟเวอร์",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "object",
+                    "properties": {
+                      "message": {
+                        "type": "string",
+                        "example": "internal server errors"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "/apiv2/addEducationalInstitution": {
+        "post": {
+          "tags": [
+            "EducationalInstitution"
+          ],
+          "summary": "สำหรับบันทึกข้อมูล EducationalInstitution",
+          "description": "สำหรับบันทึกข้อมูลทั้งหมดของ EducationalInstitution",
+          "parameters": [
+            {
+              "name": "Authorization",
+              "in": "header",
+              "required": true,
+              "schema": {
+                "type": "string",
+                "example": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+              },
+              "description": "Token จากการล็อกอิน ส่งในรูปแบบ Bearer Token"
+            }
+          ],
+          "requestBody": {
+            "required": true,
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "educational_institution_name": {
+                      "type": "string",
+                      "example": "ราชภัฏสกลนคร"
+                    },
+                    "institution_id": {
+                      "type": "int",
+                      "example": 1
+                    }
+                  },
+                  "required": [
+                    "educational_institution_name",
+                    "institution_id"
+                  ]
+                }
+              }
+            }
+          },
+          "responses": {
+            "200": {
+              "description": "ความสำเร็จทั่วไป",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "object",
+                    "properties": {
+                      "message": {
+                        "type": "string",
+                        "example": "บันทึกข้อมูลเสร็จสิ้น!"
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "400": {
+              "description": "ข้อมูลจาก Client ไม่ถูกต้อง",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "object",
+                    "properties": {
+                      "message": {
+                        "type": "string",
+                        "example": "Tokenไม่อนุญาติให้ใช้งาน! || กรุณากรอกข้อมูลให้ครบถ้วน! || บันทึกข้อมูลไม่สำเร็จ!"
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "401": {
+              "description": "การรับรองความถูกต้องล้มเหลว",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "object",
+                    "properties": {
+                      "message": {
+                        "type": "string",
+                        "example": "ไม่มีการยืนยันตัวตนด้วย OTP กรุณายืนยันตัวตนก่อนใช้งานระบบ! || Token ไม่ถูกต้อง! || Token นี้ไม่มีสิทธิ์การใช้งาน! || TokenExpiredError! || JsonWebTokenError!"
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "404": {
+              "description": "Resource ไม่พบ( Not found )",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "object",
+                    "properties": {
+                      "message": {
+                        "type": "string",
+                        "example": "ไม่มี (ข้อมูลชนิดของสถานที่ศึกษานี้) อยู่ในระบบ!"
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "409": {
+              "description": "คำร้องขอไม่สามารถดำเนินการได้เนื่องจากขัดแย้งกับสถานะปัจจุบันของทรัพยากรที่ต้องการอัพเดท",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "object",
+                    "properties": {
+                      "message": {
+                        "type": "string",
+                        "example": "มี (educational_institution_name) อยู่ในระบบแล้ว ไม่อนุญาตให้บันทึกข้อมูลซ้ำ!"
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "500": {
+              "description": "ข้อผิดพลาดเซิร์ฟเวอร์",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "object",
+                    "properties": {
+                      "message": {
+                        "type": "string",
+                        "example": "internal server errors"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "/apiv2/updateEducationalInstitution/{id}": {
+        "put": {
+          "tags": [
+            "EducationalInstitution"
+          ],
+          "summary": "สำหรับอัพเดทข้อมูล EducationalInstitution",
+          "description": "สำหรับอัพเดทข้อมูลทั้งหมดของ EducationalInstitution",
+          "parameters": [
+            {
+              "name": "Authorization",
+              "in": "header",
+              "required": true,
+              "schema": {
+                "type": "string",
+                "example": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+              },
+              "description": "Token จากการล็อกอิน ส่งในรูปแบบ Bearer Token"
+            },
+            {
+              "name": "id",
+              "in": "path",
+              "required": true,
+              "schema": {
+                "type": "integer",
+                "example": 1
+              },
+              "description": "ID ของ EducationalInstitution ที่ต้องการอัพเดท"
+            }
+          ],
+          "requestBody": {
+            "required": true,
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "educational_institution_name": {
+                      "type": "string",
+                      "example": "ราชภัฏชัยภูมิ"
+                    },
+                    "institution_id": {
+                      "type": "int",
+                      "example": 1
+                    }
+                  },
+                  "required": [
+                    "educational_institution_name",
+                    "institution_id"
+                  ]
+                }
+              }
+            }
+          },
+          "responses": {
+            "200": {
+              "description": "ความสำเร็จทั่วไป",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "object",
+                    "properties": {
+                      "message": {
+                        "type": "string",
+                        "example": "อัพเดทข้อมูลเสร็จสิ้น!"
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "400": {
+              "description": "ข้อมูลจาก Client ไม่ถูกต้อง",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "object",
+                    "properties": {
+                      "message": {
+                        "type": "string",
+                        "example": "Tokenไม่อนุญาติให้ใช้งาน! || กรุณากรอกข้อมูลให้ครบถ้วน || อัพเดทข้อมูลไม่สำเร็จ!"
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "401": {
+              "description": "การรับรองความถูกต้องล้มเหลว",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "object",
+                    "properties": {
+                      "message": {
+                        "type": "string",
+                        "example": "ไม่มีการยืนยันตัวตนด้วย OTP กรุณายืนยันตัวตนก่อนใช้งานระบบ! || Token ไม่ถูกต้อง! || Token นี้ไม่มีสิทธิ์การใช้งาน! || TokenExpiredError! || JsonWebTokenError!"
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "404": {
+              "description": "Resource ไม่พบ( Not found )",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "object",
+                    "properties": {
+                      "message": {
+                        "type": "string",
+                        "example": "ไม่มี (ข้อมูลสาขา) อยู่ในระบบ! || ไม่มี (ข้อมูลชนิดของสถานที่ศึกษานี้) อยู่ในระบบ!"
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "409": {
+              "description": "คำร้องขอไม่สามารถดำเนินการได้เนื่องจากขัดแย้งกับสถานะปัจจุบันของทรัพยากรที่ต้องการอัพเดท",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "object",
+                    "properties": {
+                      "message": {
+                        "type": "string",
+                        "example": "มี (educational_institution_name) อยู่ในระบบแล้ว ไม่อนุญาตให้บันทึกข้อมูลซ้ำ!"
                       }
                     }
                   }

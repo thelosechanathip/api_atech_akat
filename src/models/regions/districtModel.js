@@ -11,6 +11,17 @@ exports.fetchDistrictData = async () => {
     }
 }
 
+// ฟังก์ชันสำหรับดึงข้อมูล districts จากฐานข้อมูล
+exports.fetchDistrictsDataByProvinceId = async (province_id) => {
+    try {
+        const [rows] = await db.query("SELECT * FROM districts WHERE province_id = ?", [province_id]); // Query ข้อมูลจากตาราง districts
+        return rows; // ส่งคืนข้อมูลที่ได้จากฐานข้อมูล
+    } catch (err) {
+        console.error(err.message);
+        throw new Error("Failed to fetchDistrictsDataByProvinceId");
+    }
+}
+
 // Check ว่ามี Code บน Table districts หรือไม่?
 exports.checkDistrictCodeData = async (code) => {
     try {
