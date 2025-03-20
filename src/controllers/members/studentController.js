@@ -1,6 +1,8 @@
 const { 
     fetchStudentsData,
-    insertStudentData
+    insertStudentData,
+    checkIdStudentData,
+    removeStudentData
 } = require('../../models/members/studentModel');
 const moment = require('moment');
 const { msg } = require('../../utils/message');
@@ -85,5 +87,27 @@ exports.registerDataStudent = async (req, res) => {
     } catch (error) {
         console.error("Error registerStudentData data:", error.message);
         return msg(res, 500, "Internal Server Error");
+    }
+}
+
+// ใช้สำหรับลบข้อมูล Student( ข้อมูลนักศึกษา )
+exports.removeDataStudent = async (req, res) => {
+    try {
+        const { id } = req.params;
+        // Check ว่ามี ID นี้อยู่ในระบบหรือไม่?
+        const checkIdStudentDataResult = await checkIdStudentData(id);
+        if (!checkIdStudentDataResult) {
+            return msg(res, 400, 'ไม่มี (ข้อมูลนักศึกษา) อยู่ในระบบ!');
+        }
+
+        const removeStudentDataResult = await removeStudentData(id, req.body);
+        if (removeStudentDataResult) {
+            return msg(res, 200, 'ลบข้อมูลเสร็จสิ้น!');
+        } else {
+            return msg(res, 400, 'ลบข้อมูลไม่สำเร็จ!');
+        }
+    }catch(err) {
+        console.log(err);
+        return msg(res, 500, err);
     }
 }

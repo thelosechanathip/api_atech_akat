@@ -329,3 +329,39 @@ exports.insertStudentData = async (data, name) => {
         throw new Error("Failed to insert student");
     }
 };
+
+// Check ว่ามี ID นี้อยู่ใน Table students หรือไม่?
+exports.checkIdStudentData = async (id) => {
+    try {
+        const [rows] = await db.query(`SELECT id FROM students WHERE id = ?`, [id]);
+        return rows.length > 0; // ส่งกลับ true หากพบข้อมูล, false หากไม่พบ
+    } catch (err) {
+        console.error(err.message);
+        throw new Error("Failed to checkIdStudentData");
+    }
+};
+
+// ลบข้อมูลบน Table students
+exports.removeStudentData = async (id) => {
+    try {
+        // ลบข้อมูลจากตาราง students
+        const [deleteResult] = await db.query('DELETE FROM students WHERE id = ?', [id]);
+
+        // ตรวจสอบว่ามีข้อมูลถูกลบหรือไม่
+        if (deleteResult.affectedRows > 0) {
+            // หาค่า MAX(id) จากตาราง students เพื่อคำนวณค่า AUTO_INCREMENT ใหม่
+            const [maxIdResult] = await db.query('SELECT MAX(id) AS maxId FROM students');
+            const nextAutoIncrement = (maxIdResult[0].maxId || 0) + 1;
+
+            // รีเซ็ตค่า AUTO_INCREMENT
+            await db.query('ALTER TABLE students AUTO_INCREMENT = ?', [nextAutoIncrement]);
+
+            return true; // ส่งค่ากลับเพื่อบอกว่าการลบและรีเซ็ตสำเร็จ
+        }
+
+        return false; // หากไม่มีข้อมูลถูกลบ
+    } catch (err) {
+        console.error('Error while removeStudentData:', err.message);
+        throw new Error('Failed to removeStudentData');
+    }
+};
