@@ -22,6 +22,39 @@ exports.fetchStudentsData = async () => {
     }
 };
 
+// Check ว่ามี national_id(เลขบัตรประชาชน) ซ้ำในระบบหรือไม่?
+exports.checkNationalIdData = async (national_id) => {
+    try {
+        const [result] = await db.query('SELECT national_id FROM students WHERE national_id = ?', [national_id]);
+        return result.length > 0;
+    } catch (err) {
+        console.error('Error while checkNationalIdData:', err.message);
+        throw new Error('Failed to checkNationalIdData');
+    }
+}
+
+// Check ว่ามี email(Email) ซ้ำในระบบหรือไม่?
+exports.checkEmailData = async (email) => {
+    try {
+        const [result] = await db.query('SELECT email FROM students WHERE email = ?', [email]);
+        return result.length > 0;
+    } catch (err) {
+        console.error('Error while checkEmailData:', err.message);
+        throw new Error('Failed to checkEmailData');
+    }
+}
+
+// Check ว่ามี student_code(รหัสประจำตัวนักศึกษา) ซ้ำในระบบหรือไม่?
+exports.checkStudentCodeData = async (student_code) => {
+    try {
+        const [result] = await db.query('SELECT student_code FROM students WHERE student_code = ?', [student_code]);
+        return result.length > 0;
+    } catch (err) {
+        console.error('Error while checkStudentCodeData:', err.message);
+        throw new Error('Failed to checkStudentCodeData');
+    }
+}
+
 // Function สำหรับ register ข้อมูลบนระบบ students, users, user_on_roles ไปยังฐานข้อมูล
 exports.insertStudentData = async (data, name) => {
     try {
@@ -341,22 +374,64 @@ exports.checkIdStudentData = async (id) => {
     }
 };
 
+// Check ว่ามี ID ที่ส่งเข้ามาตรงกับ ID ที่ Login อยู่หรือไม่?
+exports.checkIdInLoginData = async (requestId, userId) => {
+    try {
+        const [fetchOneStudentNationalIdDataResult] = await db.query('SELECT national_id FROM students WHERE id = ?', [requestId]);
+        const [fetchOneUserIdDataResult] = await db.query('SELECT username FROM users WHERE id = ?', [userId]);
+
+        return fetchOneStudentNationalIdDataResult[0].national_id === fetchOneUserIdDataResult[0].username;
+    } catch (err) {
+        console.error('Error while checkIdInLogin:', err.message);
+        throw new Error('Failed to checkIdInLogin');
+    }
+}
+
 // ลบข้อมูลบน Table students
 exports.removeStudentData = async (id) => {
     try {
-        // ลบข้อมูลจากตาราง students
-        const [deleteResult] = await db.query('DELETE FROM students WHERE id = ?', [id]);
+        const [fetchOneStudentNationalIdDataResult] = await db.query('SELECT national_id FROM students WHERE id = ?', [id]);
+        const [fetchOneUserIdDataResult] = await db.query('SELECT id FROM users WHERE username = ?', [fetchOneStudentNationalIdDataResult[0].national_id]);
+
+        // ลบข้อมูลจากตาราง user_on_roles
+        const [deleteResult_1] = await db.query('DELETE FROM user_on_roles WHERE user_id = ?', [fetchOneUserIdDataResult[0].id]);
 
         // ตรวจสอบว่ามีข้อมูลถูกลบหรือไม่
-        if (deleteResult.affectedRows > 0) {
-            // หาค่า MAX(id) จากตาราง students เพื่อคำนวณค่า AUTO_INCREMENT ใหม่
-            const [maxIdResult] = await db.query('SELECT MAX(id) AS maxId FROM students');
-            const nextAutoIncrement = (maxIdResult[0].maxId || 0) + 1;
+        if (deleteResult_1.affectedRows > 0) {
+            // หาค่า MAX(id) จากตาราง user_on_roles เพื่อคำนวณค่า AUTO_INCREMENT ใหม่
+            const [maxIdResult_1] = await db.query('SELECT MAX(id) AS maxId FROM user_on_roles');
+            const nextAutoIncrement_1 = (maxIdResult_1[0].maxId || 0) + 1;
 
             // รีเซ็ตค่า AUTO_INCREMENT
-            await db.query('ALTER TABLE students AUTO_INCREMENT = ?', [nextAutoIncrement]);
+            await db.query('ALTER TABLE user_on_roles AUTO_INCREMENT = ?', [nextAutoIncrement_1]);
 
-            return true; // ส่งค่ากลับเพื่อบอกว่าการลบและรีเซ็ตสำเร็จ
+            // ลบข้อมูลจากตาราง users
+            const [deleteResult_2] = await db.query('DELETE FROM users WHERE id = ?', [fetchOneUserIdDataResult[0].id]);
+
+            // ตรวจสอบว่ามีข้อมูลถูกลบหรือไม่
+            if (deleteResult_2.affectedRows > 0) {
+                // หาค่า MAX(id) จากตาราง users เพื่อคำนวณค่า AUTO_INCREMENT ใหม่
+                const [maxIdResult_2] = await db.query('SELECT MAX(id) AS maxId FROM users');
+                const nextAutoIncrement_2 = (maxIdResult_2[0].maxId || 0) + 1;
+
+                // รีเซ็ตค่า AUTO_INCREMENT
+                await db.query('ALTER TABLE users AUTO_INCREMENT = ?', [nextAutoIncrement_2]);
+
+                // ลบข้อมูลจากตาราง students
+                const [deleteResult_3] = await db.query('DELETE FROM students WHERE id = ?', [id]);
+
+                // ตรวจสอบว่ามีข้อมูลถูกลบหรือไม่
+                if (deleteResult_3.affectedRows > 0) {
+                    // หาค่า MAX(id) จากตาราง students เพื่อคำนวณค่า AUTO_INCREMENT ใหม่
+                    const [maxIdResult_3] = await db.query('SELECT MAX(id) AS maxId FROM students');
+                    const nextAutoIncrement_3 = (maxIdResult_3[0].maxId || 0) + 1;
+
+                    // รีเซ็ตค่า AUTO_INCREMENT
+                    await db.query('ALTER TABLE students AUTO_INCREMENT = ?', [nextAutoIncrement_3]);
+
+                    return true; // ส่งค่ากลับเพื่อบอกว่าการลบและรีเซ็ตสำเร็จ
+                }
+            }
         }
 
         return false; // หากไม่มีข้อมูลถูกลบ

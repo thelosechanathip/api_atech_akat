@@ -1,7 +1,11 @@
 const { 
     fetchStudentsData,
+    checkNationalIdData,
+    checkEmailData,
+    checkStudentCodeData,
     insertStudentData,
     checkIdStudentData,
+    checkIdInLoginData,
     removeStudentData
 } = require('../../models/members/studentModel');
 const moment = require('moment');
@@ -81,9 +85,17 @@ exports.registerDataStudent = async (req, res) => {
             student_status_id
         } = req.body;
 
+        const checkNationalIdDataResult = await checkNationalIdData(national_id);
+        if(checkNationalIdDataResult) return msg(res, 409, 'เลขบัตรประจำตัวประชาชนซ้ำไม่สามารถ Register student ได้!');
+
+        const checkEmailDataResult = await checkEmailData(email);
+        if(checkEmailDataResult) return msg(res, 409, 'Email ซ้ำไม่สามารถ Register student ได้!');
+
+        const checkStudentCodeDataResult = await checkStudentCodeData(student_code);
+        if(checkStudentCodeDataResult) return msg(res, 409, 'รหัสนักศึกษาซ้ำไม่สามารถ Register student ได้!');
+
         const insertStudentDataResult = await insertStudentData(req.body, req.name);
-        // if(insertStudentDataResult) return msg(res, 200, 'Register student successfully!');
-        if(insertStudentDataResult) return msg(res, 200, insertStudentDataResult);
+        if(insertStudentDataResult) return msg(res, 200, 'Register student successfully!');
     } catch (error) {
         console.error("Error registerStudentData data:", error.message);
         return msg(res, 500, "Internal Server Error");
@@ -94,11 +106,13 @@ exports.registerDataStudent = async (req, res) => {
 exports.removeDataStudent = async (req, res) => {
     try {
         const { id } = req.params;
+
         // Check ว่ามี ID นี้อยู่ในระบบหรือไม่?
         const checkIdStudentDataResult = await checkIdStudentData(id);
-        if (!checkIdStudentDataResult) {
-            return msg(res, 400, 'ไม่มี (ข้อมูลนักศึกษา) อยู่ในระบบ!');
-        }
+        if (!checkIdStudentDataResult) return msg(res, 400, 'ไม่มี (ข้อมูลนักศึกษา) อยู่ในระบบ!');
+
+        const checkIdInLoginDataResult = await checkIdInLoginData(id, req.userId);
+        if (checkIdInLoginDataResult) return msg(res, 400, 'ไม่สามารถลบข้อมูลตัวเองได้!');
 
         const removeStudentDataResult = await removeStudentData(id, req.body);
         if (removeStudentDataResult) {
