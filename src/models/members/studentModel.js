@@ -11,14 +11,14 @@ function convertToThaiDateFormat(date_of_birth) {
     return `${day}${month}${buddhistYear}`;
 }
 
-// ฟังก์ชันสำหรับดึงข้อมูล student จากฐานข้อมูล
+// ฟังก์ชันสำหรับดึงข้อมูล students จากฐานข้อมูล
 exports.fetchStudentsData = async () => {
     try {
         const [rows] = await db.query("SELECT * FROM students"); // Query ข้อมูลจากตาราง students
         return rows; // ส่งคืนข้อมูลที่ได้จากฐานข้อมูล
     } catch (err) {
         console.error(err.message);
-        throw new Error("Failed to fetch student data");
+        throw new Error("Failed to fetchStudentsData");
     }
 };
 

@@ -1,209 +1,229 @@
 const db = require('../../config/db');
+const moment = require('moment');
+const bcrypt = require('bcryptjs');
 
-// ฟังก์ชันสำหรับดึงข้อมูล Teacher จากฐานข้อมูล
-exports.fetchTeacherData = async () => {
+function convertToThaiDateFormat(date_of_birth) {
+    let birthDate = moment(date_of_birth, "YYYY-MM-DD");
+    let day = birthDate.format("DD");
+    let month = birthDate.format("MM");
+    let buddhistYear = birthDate.year() + 543;
+
+    return `${day}${month}${buddhistYear}`;
+}
+
+// ฟังก์ชันสำหรับดึงข้อมูล teachers จากฐานข้อมูล
+exports.fetchTeachersData = async () => {
     try {
         const [rows] = await db.query("SELECT * FROM teachers"); // Query ข้อมูลจากตาราง teachers
         return rows; // ส่งคืนข้อมูลที่ได้จากฐานข้อมูล
     } catch (err) {
         console.error(err.message);
-        throw new Error("Failed to fetch teacher data");
+        throw new Error("Failed to fetchTeachersData");
     }
 };
 
-// Check ว่ามี PrefixsId บน Table prefixes หรือไม่?
-exports.checkTeacherPrefixsIdData = async (prefixes_id) => {
+// Check ว่ามี national_id(เลขบัตรประชาชน) ซ้ำในระบบหรือไม่?
+exports.checkNationalIdData = async (national_id) => {
     try {
-        const [rows] = await db.query("SELECT id FROM prefixes WHERE id = ?", [prefixes_id]);
-        return rows.length > 0; // ส่งกลับ true หากพบข้อมูล, false หากไม่พบ
+        const [result] = await db.query('SELECT national_id FROM teachers WHERE national_id = ?', [national_id]);
+        return result.length > 0;
     } catch (err) {
-        console.error(err.message);
-        throw new Error("Failed to check prefixes_id data");
+        console.error('Error while checkNationalIdData:', err.message);
+        throw new Error('Failed to checkNationalIdData');
     }
 }
 
-// Check ว่ามี NationalId บน Table teachers หรือไม่?
-exports.checkTeacherNationalIdData = async (national_id) => {
+// Check ว่ามี email(Email) ซ้ำในระบบหรือไม่?
+exports.checkEmailData = async (email) => {
     try {
-        const [rows] = await db.query("SELECT national_id FROM teachers WHERE national_id = ?", [national_id]);
-        return rows.length > 0; // ส่งกลับ true หากพบข้อมูล, false หากไม่พบ
+        const [result] = await db.query('SELECT email FROM teachers WHERE email = ?', [email]);
+        return result.length > 0;
     } catch (err) {
-        console.error(err.message);
-        throw new Error("Failed to check national_id data");
+        console.error('Error while checkEmailData:', err.message);
+        throw new Error('Failed to checkEmailData');
     }
 }
 
-// Check ว่ามี GendersId บน Table genders หรือไม่?
-exports.checkTeacherGendersIdData = async (genders_id) => {
+// Function สำหรับ register ข้อมูลบนระบบ teachers, users, user_on_roles ไปยังฐานข้อมูล
+exports.insertTeacherData = async (data, name) => {
     try {
-        const [rows] = await db.query("SELECT id FROM genders WHERE id = ?", [genders_id]);
-        return rows.length > 0; // ส่งกลับ true หากพบข้อมูล, false หากไม่พบ
-    } catch (err) {
-        console.error(err.message);
-        throw new Error("Failed to check genders_id data");
-    }
-}
-
-// Check ว่ามี Email บน Table teachers หรือไม่?
-exports.checkTeacherEmailData = async (email) => {
-    try {
-        const [rows] = await db.query("SELECT email FROM teachers WHERE email = ?", [email]);
-        return rows.length > 0; // ส่งกลับ true หากพบข้อมูล, false หากไม่พบ
-    } catch (err) {
-        console.error(err.message);
-        throw new Error("Failed to check email data");
-    }
-}
-
-// Check ว่ามี SubDisctrictsId บน Table sub_districts หรือไม่?
-exports.checkTeacherSubDisctrictsIdData = async (subdistricts_id) => {
-    try {
-        const [rows] = await db.query("SELECT id FROM sub_districts WHERE id = ?", [subdistricts_id]);
-        return rows.length > 0; // ส่งกลับ true หากพบข้อมูล, false หากไม่พบ
-    } catch (err) {
-        console.error(err.message);
-        throw new Error("Failed to check subdistricts_id data");
-    }
-}
-
-// Check ว่ามี DisctrictsId บน Table districts หรือไม่?
-exports.checkTeacherDisctrictsIdData = async (districts_id) => {
-    try {
-        const [rows] = await db.query("SELECT id FROM districts WHERE id = ?", [districts_id]);
-        return rows.length > 0; // ส่งกลับ true หากพบข้อมูล, false หากไม่พบ
-    } catch (err) {
-        console.error(err.message);
-        throw new Error("Failed to check districts_id data");
-    }
-}
-
-// Check ว่ามี ProvincesId บน Table provinces หรือไม่?
-exports.checkTeacherProvincesIdData = async (provinces_id) => {
-    try {
-        const [rows] = await db.query("SELECT id FROM provinces WHERE id = ?", [provinces_id]);
-        return rows.length > 0; // ส่งกลับ true หากพบข้อมูล, false หากไม่พบ
-    } catch (err) {
-        console.error(err.message);
-        throw new Error("Failed to check provinces_id data");
-    }
-}
-
-// Check ว่ามี ProgramsId บน Table programs หรือไม่?
-exports.checkTeacherProgramsIdData = async (programs_id) => {
-    try {
-        const [rows] = await db.query("SELECT id FROM programs WHERE id = ?", [programs_id]);
-        return rows.length > 0; // ส่งกลับ true หากพบข้อมูล, false หากไม่พบ
-    } catch (err) {
-        console.error(err.message);
-        throw new Error("Failed to check programs_id data");
-    }
-}
-
-// Check ว่ามี PositionsId บน Table positions หรือไม่?
-exports.checkTeacherPositionsIdData = async (positions_id) => {
-    try {
-        const [rows] = await db.query("SELECT id FROM positions WHERE id = ?", [positions_id]);
-        return rows.length > 0; // ส่งกลับ true หากพบข้อมูล, false หากไม่พบ
-    } catch (err) {
-        console.error(err.message);
-        throw new Error("Failed to check positions_id data");
-    }
-}
-
-// Check ว่ามี StatusId บน Table teacher_status หรือไม่?
-exports.checkTeacherStatusIdData = async (teacher_status_id) => {
-    try {
-        const [rows] = await db.query("SELECT id FROM teacher_status WHERE id = ?", [teacher_status_id]);
-        return rows.length > 0; // ส่งกลับ true หากพบข้อมูล, false หากไม่พบ
-    } catch (err) {
-        console.error(err.message);
-        throw new Error("Failed to check teacher_status_id data");
-    }
-}
-
-// เพิ่มข้อมูลไปยัง Table teachers
-exports.addTeacherData = async (data) => {
-    try {
-        const { 
-            prefixes_id,
-            first_name,
-            last_name,
-            genders_id,
-            date_of_birth,
+        const {
+            prefix_id,
+            first_name_thai,
+            last_name_thai,
+            first_name_english,
+            last_name_english,
+            nationality_id,
+            ethnicity_id,
+            religion_id,
+            gender_id,
             national_id,
+            date_of_birth,
             phone_number,
             email,
             house_number,
             village_group,
-            subdistricts_id,
-            districts_id,
-            provinces_id,
-            programs_id,
-            positions_id,
-            start_date,
+            sub_district_id,
+            district_id,
+            province_id,
+            education_level_id,
+            specialization_id,
+            educational_institution_id,
+            position_id,
             image,
-            teacher_status_id,
-            created_by, 
-            updated_by 
+            teacher_status_id
         } = data;
 
-        // จัดการแปลง Base64 ให้กลายเป็น Buffer Binary
-        const base64Data = await image.split(',')[1]; // ลบส่วนหัวของ Base64
-        const imageBuffer = await Buffer.from(base64Data, 'base64'); // แปลงข้อมูล base64 ให้กลายเป็น buffer binary
+        let dateNow = moment(); // เวลาปัจจุบัน
+        let birthDate = moment(date_of_birth, "YYYY-MM-DD"); // แปลงวันเกิดเป็น moment object
+        let enrollment_age = dateNow.diff(birthDate, 'years'); // คำนวณอายุเป็นปี
 
-        const [result] = await db.query(
+        // ✅ แปลง birthDate เป็น format "YYYY-MM-DD"
+        let birthDateFormatted = birthDate.format("YYYY-MM-DD");
+
+        // ✅ เพิ่มชื่อตาราง teachers ลงไปใน INSERT INTO
+        const [insertTeacherResult] = await db.query(
             `
                 INSERT INTO teachers (
-                    prefixes_id,
-                    first_name,
-                    last_name,
-                    genders_id,
-                    date_of_birth,
+                    prefix_id,
+                    first_name_thai,
+                    last_name_thai,
+                    first_name_english,
+                    last_name_english,
+                    enrollment_age,
+                    nationality_id,
+                    ethnicity_id,
+                    religion_id,
+                    gender_id,
                     national_id,
+                    date_of_birth,
                     phone_number,
                     email,
                     house_number,
                     village_group,
-                    subdistricts_id,
-                    districts_id,
-                    provinces_id,
-                    programs_id,
-                    positions_id,
-                    start_date,
+                    sub_district_id,
+                    district_id,
+                    province_id,
+                    education_level_id,
+                    specialization_id,
+                    educational_institution_id,
+                    position_id,
                     image,
                     teacher_status_id,
-                    created_by, 
-                    updated_by 
+                    created_by,
+                    updated_by
+                ) VALUES (
+                    ?,
+                    ?,
+                    ?,
+                    ?,
+                    ?,
+                    ?,
+                    ?,
+                    ?,
+                    ?,
+                    ?,
+                    ?,
+                    ?,
+                    ?,
+                    ?,
+                    ?,
+                    ?,
+                    ?,
+                    ?,
+                    ?,
+                    ?,
+                    ?,
+                    ?,
+                    ?,
+                    ?,
+                    ?,
+                    ?,
+                    ?
                 )
-                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
             `,
             [
-                prefixes_id,
-                first_name,
-                last_name,
-                genders_id,
-                date_of_birth,
+                prefix_id,
+                first_name_thai,
+                last_name_thai,
+                first_name_english,
+                last_name_english,
+                enrollment_age,
+                nationality_id,
+                ethnicity_id,
+                religion_id,
+                gender_id,
                 national_id,
+                birthDateFormatted,
                 phone_number,
                 email,
                 house_number,
                 village_group,
-                subdistricts_id,
-                districts_id,
-                provinces_id,
-                programs_id,
-                positions_id,
-                start_date,
-                imageBuffer,
+                sub_district_id,
+                district_id,
+                province_id,
+                education_level_id,
+                specialization_id,
+                educational_institution_id,
+                position_id,
+                image,
                 teacher_status_id,
-                created_by, 
-                updated_by 
+                name,
+                name
             ]
         );
-        return result.affectedRows > 0; // ส่งกลับ true หากมีการเพิ่มข้อมูล, false หากไม่มี
+
+        let thaiDate = convertToThaiDateFormat(date_of_birth);
+
+        if(insertTeacherResult.affectedRows > 0) {
+            // Hash password
+            const salt = await bcrypt.genSalt(10);
+            const hashPassword = await bcrypt.hash(thaiDate, salt);
+            const [insertUserResult] = await db.query(
+                `
+                    INSERT INTO users (
+                        username,
+                        password,
+                        created_by,
+                        updated_by
+                    ) VALUES (
+                        ?, ?, ?, ? 
+                    )
+                `,
+                [
+                    national_id, hashPassword, name, name
+                ]
+            );
+
+            // ตรวจสอบว่ามีผลลัพธ์จากการคิวรีก่อนที่จะเข้าถึง id
+            if(insertUserResult.affectedRows > 0) {
+                const [fetchOneRoleDataResult] = await db.query('SELECT id, role_name FROM roles WHERE role_name = ?', ['teacher']);
+                
+                if (fetchOneRoleDataResult.length > 0) {
+                    const [insertUserOnRoleResult] = await db.query(
+                        `
+                            INSERT INTO user_on_roles(
+                                user_id,
+                                role_id,
+                                created_by,
+                                updated_by
+                            ) VALUES (
+                                ?, ?, ?, ? 
+                            )
+                        `,
+                        [insertUserResult.insertId, fetchOneRoleDataResult[0].id, name, name]
+                    )
+                    return insertUserOnRoleResult.affectedRows > 0;
+                } else {
+                    console.error("Role data not found.");
+                }
+            } else {
+                console.error("User insert failed or id not found.");
+            }
+        }
     } catch (err) {
-        console.error(err.message);
-        throw new Error("Failed to add teacher data");
+        console.error("Error inserting Teacher data:", err.message);
+        throw new Error("Failed to insert Teacher");
     }
 };
 
@@ -214,115 +234,73 @@ exports.checkIdTeacherData = async (id) => {
         return rows.length > 0; // ส่งกลับ true หากพบข้อมูล, false หากไม่พบ
     } catch (err) {
         console.error(err.message);
-        throw new Error("Failed to check id data");
+        throw new Error("Failed to checkIdTeacherData");
     }
 };
 
-// อัพเดทข้อมูลไปยัง Table teachers
-exports.updateTeacherData = async (id, data) => {
+// Check ว่ามี ID ที่ส่งเข้ามาตรงกับ ID ที่ Login อยู่หรือไม่?
+exports.checkIdInLoginData = async (requestId, userId) => {
     try {
-        const { 
-            prefixes_id,
-            first_name,
-            last_name,
-            genders_id,
-            date_of_birth,
-            national_id,
-            phone_number,
-            email,
-            house_number,
-            village_group,
-            subdistricts_id,
-            districts_id,
-            provinces_id,
-            programs_id,
-            positions_id,
-            start_date,
-            image,
-            teacher_status_id,
-            updated_by 
-        } = data;
+        const [fetchOneStudentNationalIdDataResult] = await db.query('SELECT national_id FROM teachers WHERE id = ?', [requestId]);
+        const [fetchOneUserIdDataResult] = await db.query('SELECT username FROM users WHERE id = ?', [userId]);
 
-        // จัดการแปลง Base64 ให้กลายเป็น Buffer Binary
-        const base64Data = await image.split(',')[1]; // ลบส่วนหัวของ Base64
-        const imageBuffer = await Buffer.from(base64Data, 'base64'); // แปลงข้อมูล base64 ให้กลายเป็น buffer binary
-
-        const [result] = await db.query(
-            `
-                UPDATE teachers 
-                SET 
-                    prefixes_id = ?,
-                    first_name = ?,
-                    last_name = ?,
-                    genders_id = ?,
-                    date_of_birth = ?,
-                    national_id = ?,
-                    phone_number = ?,
-                    email = ?,
-                    house_number = ?,
-                    village_group = ?,
-                    subdistricts_id = ?,
-                    districts_id = ?,
-                    provinces_id = ?,
-                    programs_id = ?,
-                    positions_id = ?,
-                    start_date = ?,
-                    image = ?,
-                    teacher_status_id = ?,
-                    updated_by = ?
-                WHERE id = ?
-            `,
-            [
-                prefixes_id,
-                first_name,
-                last_name,
-                genders_id,
-                date_of_birth,
-                national_id,
-                phone_number,
-                email,
-                house_number,
-                village_group,
-                subdistricts_id,
-                districts_id,
-                provinces_id,
-                programs_id,
-                positions_id,
-                start_date,
-                imageBuffer,
-                teacher_status_id,
-                updated_by,
-                id
-            ]
-        );
-        return result.affectedRows > 0; // ส่งกลับ true หากมีการอัพเดทข้อมูล, false หากไม่มี
+        return fetchOneStudentNationalIdDataResult[0].national_id === fetchOneUserIdDataResult[0].username;
     } catch (err) {
-        console.error(err.message);
-        throw new Error("Failed to update teacher data");
+        console.error('Error while checkIdInLogin:', err.message);
+        throw new Error('Failed to checkIdInLogin');
     }
-};
+}
 
 // ลบข้อมูลบน Table teachers
 exports.removeTeacherData = async (id) => {
     try {
-        // ลบข้อมูลจากตาราง teachers
-        const [deleteResult] = await db.query('DELETE FROM teachers WHERE id = ?', [id]);
+        const [fetchOneTeacherNationalIdDataResult] = await db.query('SELECT national_id FROM teachers WHERE id = ?', [id]);
+        const [fetchOneUserIdDataResult] = await db.query('SELECT id FROM users WHERE username = ?', [fetchOneTeacherNationalIdDataResult[0].national_id]);
+
+        // ลบข้อมูลจากตาราง user_on_roles
+        const [deleteResult_1] = await db.query('DELETE FROM user_on_roles WHERE user_id = ?', [fetchOneUserIdDataResult[0].id]);
 
         // ตรวจสอบว่ามีข้อมูลถูกลบหรือไม่
-        if (deleteResult.affectedRows > 0) {
-            // หาค่า MAX(id) จากตาราง teachers เพื่อคำนวณค่า AUTO_INCREMENT ใหม่
-            const [maxIdResult] = await db.query('SELECT MAX(id) AS maxId FROM teachers');
-            const nextAutoIncrement = (maxIdResult[0].maxId || 0) + 1;
+        if (deleteResult_1.affectedRows > 0) {
+            // หาค่า MAX(id) จากตาราง user_on_roles เพื่อคำนวณค่า AUTO_INCREMENT ใหม่
+            const [maxIdResult_1] = await db.query('SELECT MAX(id) AS maxId FROM user_on_roles');
+            const nextAutoIncrement_1 = (maxIdResult_1[0].maxId || 0) + 1;
 
             // รีเซ็ตค่า AUTO_INCREMENT
-            await db.query('ALTER TABLE teachers AUTO_INCREMENT = ?', [nextAutoIncrement]);
+            await db.query('ALTER TABLE user_on_roles AUTO_INCREMENT = ?', [nextAutoIncrement_1]);
 
-            return true; // ส่งค่ากลับเพื่อบอกว่าการลบและรีเซ็ตสำเร็จ
+            // ลบข้อมูลจากตาราง users
+            const [deleteResult_2] = await db.query('DELETE FROM users WHERE id = ?', [fetchOneUserIdDataResult[0].id]);
+
+            // ตรวจสอบว่ามีข้อมูลถูกลบหรือไม่
+            if (deleteResult_2.affectedRows > 0) {
+                // หาค่า MAX(id) จากตาราง users เพื่อคำนวณค่า AUTO_INCREMENT ใหม่
+                const [maxIdResult_2] = await db.query('SELECT MAX(id) AS maxId FROM users');
+                const nextAutoIncrement_2 = (maxIdResult_2[0].maxId || 0) + 1;
+
+                // รีเซ็ตค่า AUTO_INCREMENT
+                await db.query('ALTER TABLE users AUTO_INCREMENT = ?', [nextAutoIncrement_2]);
+
+                // ลบข้อมูลจากตาราง teachers
+                const [deleteResult_3] = await db.query('DELETE FROM teachers WHERE id = ?', [id]);
+
+                // ตรวจสอบว่ามีข้อมูลถูกลบหรือไม่
+                if (deleteResult_3.affectedRows > 0) {
+                    // หาค่า MAX(id) จากตาราง teachers เพื่อคำนวณค่า AUTO_INCREMENT ใหม่
+                    const [maxIdResult_3] = await db.query('SELECT MAX(id) AS maxId FROM teachers');
+                    const nextAutoIncrement_3 = (maxIdResult_3[0].maxId || 0) + 1;
+
+                    // รีเซ็ตค่า AUTO_INCREMENT
+                    await db.query('ALTER TABLE teachers AUTO_INCREMENT = ?', [nextAutoIncrement_3]);
+
+                    return true; // ส่งค่ากลับเพื่อบอกว่าการลบและรีเซ็ตสำเร็จ
+                }
+            }
         }
 
         return false; // หากไม่มีข้อมูลถูกลบ
     } catch (err) {
-        console.error('Error while removing teacher data:', err.message);
-        throw new Error('Failed to remove teacher data');
+        console.error('Error while removeTeacherData:', err.message);
+        throw new Error('Failed to removeTeacherData');
     }
 };
