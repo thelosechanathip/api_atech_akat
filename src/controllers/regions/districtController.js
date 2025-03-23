@@ -30,9 +30,9 @@ exports.getAllDataDistrict = async(req, res) => {
 // ใช้สำหรับดึงข้อมูล District (ข้อมูลอำเภอ) ที่อ้างอิงจาก province_id
 exports.getDistrictsDataByProvinceId = async (req, res) => {
     try {
-        const { province_id } = req.body;
-        if(!province_id) return msg(res, 400, 'กรุณากรอกข้อมูลให้ครบถ้วน!');
-        const fetchDistrictsDataByProvinceIdResult = await fetchDistrictsDataByProvinceId(province_id);
+        const { id } = req.params;
+
+        const fetchDistrictsDataByProvinceIdResult = await fetchDistrictsDataByProvinceId(id);
         if (!Array.isArray(fetchDistrictsDataByProvinceIdResult) || fetchDistrictsDataByProvinceIdResult.length === 0) return msg(res, 404, "No data found");
 
         return msg(res, 200, fetchDistrictsDataByProvinceIdResult);

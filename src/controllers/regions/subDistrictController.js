@@ -29,9 +29,9 @@ exports.getAlldataSubDistrict = async(req, res) => {
 // ใช้สำหรับดึงข้อมูล SubDistrict (ข้อมูลตำบล) ที่อ้างอิงจาก district_id
 exports.getSubDistrictsDataByDistrictId = async (req, res) => {
     try {
-        const { district_id } = req.body;
-        if(!district_id) return msg(res, 400, 'กรุณากรอกข้อมูลให้ครบถ้วน!');
-        const fetchSubDistrictsDataByDistrictIdResult = await fetchSubDistrictsDataByDistrictId(district_id);
+        const { id } = req.params;
+
+        const fetchSubDistrictsDataByDistrictIdResult = await fetchSubDistrictsDataByDistrictId(id);
         if (!Array.isArray(fetchSubDistrictsDataByDistrictIdResult) || fetchSubDistrictsDataByDistrictIdResult.length === 0) return msg(res, 404, "No data found");
 
         return msg(res, 200, fetchSubDistrictsDataByDistrictIdResult);

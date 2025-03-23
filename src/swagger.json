@@ -1704,7 +1704,7 @@
           }
         }
       },
-      "/apiv2/getDistrictByProvinceId": {
+      "/apiv2/getDistrictByProvinceId/{id}": {
         "post": {
           "tags": [
             "District"
@@ -1721,6 +1721,16 @@
                 "example": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
               },
               "description": "Token จากการล็อกอิน ส่งในรูปแบบ Bearer Token"
+            },
+            {
+              "name": "id",
+              "in": "path",
+              "required": true,
+              "schema": {
+                "type": "integer",
+                "example": 1
+              },
+              "description": "ID ของ District ที่ต้องการอัพเดท"
             }
           ],
           "requestBody": {
@@ -2410,7 +2420,7 @@
           }
         }
       },
-      "/apiv2/getSubDistrictByDistrictId": {
+      "/apiv2/getSubDistrictByDistrictId/{id}": {
         "post": {
           "tags": [
             "SubDistrict"
@@ -2427,6 +2437,16 @@
                 "example": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
               },
               "description": "Token จากการล็อกอิน ส่งในรูปแบบ Bearer Token"
+            },
+            {
+              "name": "id",
+              "in": "path",
+              "required": true,
+              "schema": {
+                "type": "integer",
+                "example": 1
+              },
+              "description": "ID ของ SubDistrict ที่ต้องการอัพเดท"
             }
           ],
           "requestBody": {
