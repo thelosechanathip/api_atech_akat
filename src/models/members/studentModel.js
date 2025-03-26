@@ -22,39 +22,6 @@ exports.fetchStudentsData = async () => {
     }
 };
 
-// Check ว่ามี national_id(เลขบัตรประชาชน) ซ้ำในระบบหรือไม่?
-exports.checkNationalIdData = async (national_id) => {
-    try {
-        const [result] = await db.query('SELECT national_id FROM students WHERE national_id = ?', [national_id]);
-        return result.length > 0;
-    } catch (err) {
-        console.error('Error while checkNationalIdData:', err.message);
-        throw new Error('Failed to checkNationalIdData');
-    }
-}
-
-// Check ว่ามี email(Email) ซ้ำในระบบหรือไม่?
-exports.checkEmailData = async (email) => {
-    try {
-        const [result] = await db.query('SELECT email FROM students WHERE email = ?', [email]);
-        return result.length > 0;
-    } catch (err) {
-        console.error('Error while checkEmailData:', err.message);
-        throw new Error('Failed to checkEmailData');
-    }
-}
-
-// Check ว่ามี student_code(รหัสประจำตัวนักศึกษา) ซ้ำในระบบหรือไม่?
-exports.checkStudentCodeData = async (student_code) => {
-    try {
-        const [result] = await db.query('SELECT student_code FROM students WHERE student_code = ?', [student_code]);
-        return result.length > 0;
-    } catch (err) {
-        console.error('Error while checkStudentCodeData:', err.message);
-        throw new Error('Failed to checkStudentCodeData');
-    }
-}
-
 // Function สำหรับ register ข้อมูลบนระบบ students, users, user_on_roles ไปยังฐานข้อมูล
 exports.insertStudentData = async (data, name) => {
     try {
@@ -307,7 +274,6 @@ exports.insertStudentData = async (data, name) => {
                 name
             ]
         );
-        
 
         let thaiDate = convertToThaiDateFormat(date_of_birth);
 
