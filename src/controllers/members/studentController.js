@@ -1,14 +1,3 @@
-const { 
-    fetchStudentsData,
-    doubleCheckInformation,
-    checkNationalIdData,
-    checkEmailData,
-    checkStudentCodeData,
-    insertStudentData,
-    checkIdStudentData,
-    checkIdInLoginData,
-    removeStudentData
-} = require('../../models/members/studentModel');
 const moment = require('moment');
 const db = require('../../config/db');
 const bcrypt = require('bcryptjs');
@@ -18,13 +7,13 @@ const { convertToThaiDateFormat } = require('../../utils/checkAll');
 // ใช้สำหรับดึงข้อมูล Student (ข้อมูลนักศึกษา)
 exports.getAllDataStudents = async (req, res) => {
     try {
-        const fetchStudentDataResults = await fetchStudentsData(); // เรียกใช้ฟังก์ชันโดยตรง
+        const [rows] = await db.query("SELECT * FROM students");
 
         // Check ว่ามีข้อมูลใน Table หรือไม่?
-        if (!Array.isArray(fetchStudentDataResults) || fetchStudentDataResults.length === 0) {
+        if (rows.length === 0) {
             return msg(res, 404, "No data found");
         }
-        return msg(res, 200, fetchStudentDataResults);
+        return msg(res, 200, rows);
     } catch (error) {
         console.error("Error getAllDataStudents data:", error.message);
         return msg(res, 500, "Internal Server Error");
@@ -109,6 +98,59 @@ exports.registerDataStudent = async (req, res) => {
     }
 };
 
+// ใช้สำหรับอัพเดทข้อมูล Student( ข้อมูลนักศึกษา )
+exports.updateDataStudent = async (req, res) => {
+    try {
+        const studentId = req.params.id;
+        const studentData = req.body;
+        const duplicateMessages = [];
+        let enrollment_age = null;
+
+        // อัปเดตข้อมูลพื้นฐาน
+        studentData.updated_by = req.name;
+        studentData.updated_at = moment().format("YYYY-MM-DD HH:mm:ss");
+
+        // เช็คว่ามีนักศึกษานี้ในฐานข้อมูลหรือไม่
+        const [fetchOneStudentIdResult] = await db.query('SELECT id FROM students WHERE id = ?', [studentId]);
+        if (fetchOneStudentIdResult.length === 0) return msg(res, 404, 'ไม่มีข้อมูลนักศึกษา!');
+
+        // ตรวจสอบข้อมูลซ้ำ
+        await Promise.all(
+            Object.entries(studentData).map(async ([key, value]) => {
+                if (["national_id", "email", "student_code"].includes(key) && value) {
+                    const [rows] = await db.query(`SELECT id FROM students WHERE ${key} = ? LIMIT 1`, [value]);
+                    if (rows.length > 0) duplicateMessages.push(`( ${value} ) มีข้อมูลในระบบแล้ว ไม่อนุญาตให้บันทึกข้อมูลซ้ำ!`);
+                }
+
+                // คำนวณอายุจากวันเกิด
+                if (key === "date_of_birth" && value) {
+                    let birthDate = moment(value, "YYYY-MM-DD");
+                    enrollment_age = moment().diff(birthDate, "years");
+                }
+            })
+        );
+
+        if (duplicateMessages.length > 0) return msg(res, 409, { message: duplicateMessages.join(" AND ") });
+
+        // เพิ่มค่าอายุเข้าไปใน studentData
+        studentData.enrollment_age = enrollment_age;
+
+        // สร้าง SQL Query แบบ Dynamic
+        const fields = Object.keys(studentData).map(field => `${field} = ?`).join(", ");
+        const values = [...Object.values(studentData), studentId];
+
+        const sql = `UPDATE students SET ${fields} WHERE id = ?`;
+
+        // อัปเดตข้อมูลนักศึกษา
+        const [updatedStudentResult] = await db.query(sql, values);
+
+        if (updatedStudentResult.affectedRows > 0) return msg(res, 200, "Update student successfully!");
+    } catch (error) {
+        console.error("Error updateDataStudent data:", error.message);
+        return msg(res, 500, "Internal Server Error");
+    }
+};
+
 // ใช้สำหรับลบข้อมูล Student( ข้อมูลนักศึกษา )
 exports.removeDataStudent = async (req, res) => {
     try {
@@ -162,7 +204,7 @@ exports.removeDataStudent = async (req, res) => {
                 }
             }
         }
-    }catch(error) {
+    } catch(error) {
         console.error("Error removeDataStudent data:", error.message);
         return msg(res, 500, "Internal Server Error");
     }
