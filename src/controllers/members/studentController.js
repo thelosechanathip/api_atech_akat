@@ -208,4 +208,4 @@ exports.removeDataStudent = async (req, res) => {
         console.error("Error removeDataStudent data:", error.message);
         return msg(res, 500, "Internal Server Error");
     }
-}
+};

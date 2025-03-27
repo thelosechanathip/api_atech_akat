@@ -97,7 +97,6 @@ exports.updateDataAdmin = async (req, res) => {
         const adminId = req.params.id;
         const adminData = req.body;
         const duplicateMessages = [];
-        let enrollment_age = null;
 
         // อัปเดตข้อมูลพื้นฐาน
         adminData.updated_by = req.name;
@@ -192,4 +191,4 @@ exports.removeDataAdmin = async (req, res) => {
         console.log(err);
         return msg(res, 500, err);
     }
-}
+};
