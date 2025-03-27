@@ -66,7 +66,7 @@ exports.authCheckAdmin = async (req, res, next) => {
 
         let hasRole1 = false;
         roleIds.forEach(id => {
-            if (id === 1) hasRole1 = true;
+            if (id === 1 || id === 4) hasRole1 = true;
         });
 
         if (!hasRole1) return msg(res, 401, { message: 'Token นี้ไม่มีสิทธิ์การใช้งาน!' });

@@ -107,6 +107,10 @@
       {
         "name": "EducationalInstitution",
         "description": "Endpoints สำหรับการจัดการตาราง educational_institutions( ตารางเก็บข้อมูลชื่อสถานที่ศึกษา( ตัวอย่าง: ( ราชภัฏสกลนคร, 1 ) ) )"
+      },
+      {
+        "name": "Student",
+        "description": "Endpoints สำหรับการจัดการตาราง students( ตารางเก็บข้อมูลนักศึกษา )"
       }
     ],
     "paths": {
@@ -12281,6 +12285,1165 @@
                       "message": {
                         "type": "string",
                         "example": "มี (educational_institution_name) อยู่ในระบบแล้ว ไม่อนุญาตให้บันทึกข้อมูลซ้ำ!"
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "500": {
+              "description": "ข้อผิดพลาดเซิร์ฟเวอร์",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "object",
+                    "properties": {
+                      "message": {
+                        "type": "string",
+                        "example": "internal server errors"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "/apiv2/getStudents": {
+        "get": {
+          "tags": [
+            "Student"
+          ],
+          "summary": "สำหรับดึงข้อมูล Student",
+          "description": "สำหรับดึงข้อมูลทั้งหมดของ Student",
+          "parameters": [
+            {
+              "name": "Authorization",
+              "in": "header",
+              "required": true,
+              "schema": {
+                "type": "string",
+                "example": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+              },
+              "description": "Token จากการล็อกอิน ส่งในรูปแบบ Bearer Token"
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "ความสำเร็จทั่วไป",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "object",
+                    "properties": {
+                      "message": {
+                        "type": "array",
+                        "items": {
+                          "type": "object",
+                          "properties": {
+                            "id": {
+                              "type": "integer",
+                              "example": 1
+                            },
+                            "prefix_id": {
+                              "type": "int",
+                              "example": 1
+                            },
+                            "first_name_thai": {
+                              "type": "string",
+                              "example": "ดำสนิท"
+                            },
+                            "last_name_thai": {
+                              "type": "string",
+                              "example": "สิดส่ายหน้า"
+                            },
+                            "first_name_english": {
+                              "type": "string",
+                              "example": "dumsnid"
+                            },
+                            "last_name_english": {
+                              "type": "string",
+                              "example": "sidsaina"
+                            },
+                            "national_id": {
+                              "type": "string",
+                              "example": "1234567891234"
+                            },
+                            "date_of_birth": {
+                              "type": "date",
+                              "example": "1996-11-09T17:00:00.000Z"
+                            },
+                            "gender_id": {
+                              "type": "int",
+                              "example": 1
+                            },
+                            "enrollment_age": {
+                              "type": "string",
+                              "example": "28"
+                            },
+                            "nationality_id": {
+                              "type": "int",
+                              "example": 1
+                            },
+                            "ethnicity_id": {
+                              "type": "int",
+                              "example": 1
+                            },
+                            "religion_id": {
+                              "type": "int",
+                              "example": 1
+                            },
+                            "phone_number": {
+                              "type": "string",
+                              "example": "0871234561"
+                            },
+                            "email": {
+                              "type": "string",
+                              "example": "student@gmail.com"
+                            },
+                            "house_number": {
+                              "type": "string",
+                              "example": "13"
+                            },
+                            "village_group": {
+                              "type": "string",
+                              "example": "13"
+                            },
+                            "sub_district_id": {
+                              "type": "int",
+                              "example": 3908
+                            },
+                            "district_id": {
+                              "type": "int",
+                              "example": 493
+                            },
+                            "province_id": {
+                              "type": "int",
+                              "example": 36
+                            },
+                            "student_code": {
+                              "type": "string",
+                              "example": "S00001"
+                            },
+                            "enrollment_date": {
+                              "type": "date",
+                              "example": "2025-03-26T17:00:00.000Z"
+                            },
+                            "enrollment_year": {
+                              "type": "int",
+                              "example": 2025
+                            },
+                            "enrollment_term_id": {
+                              "type": "int",
+                              "example": 1
+                            },
+                            "educational_institution_id": {
+                              "type": "int",
+                              "example": 1
+                            },
+                            "education_level_id": {
+                              "type": "int",
+                              "example": 1
+                            },
+                            "father_prefix_id": {
+                              "type": "int",
+                              "example": null
+                            },
+                            "father_first_name_thai": {
+                              "type": "string",
+                              "example": null
+                            },
+                            "father_last_name_thai": {
+                              "type": "string",
+                              "example": null
+                            },
+                            "father_national_id": {
+                              "type": "int",
+                              "example": null
+                            },
+                            "father_marital_status_id": {
+                              "type": "int",
+                              "example": null
+                            },
+                            "father_occupation_id": {
+                              "type": "int",
+                              "example": null
+                            },
+                            "father_nationality_id": {
+                              "type": "int",
+                              "example": null
+                            },
+                            "father_phone_number": {
+                              "type": "string",
+                              "example": null
+                            },
+                            "mother_prefix_id": {
+                              "type": "int",
+                              "example": null
+                            },
+                            "mother_first_name_thai": {
+                              "type": "string",
+                              "example": null
+                            },
+                            "mother_last_name_thai": {
+                              "type": "string",
+                              "example": null
+                            },
+                            "mother_national_id": {
+                              "type": "int",
+                              "example": null
+                            },
+                            "mother_marital_status_id": {
+                              "type": "int",
+                              "example": null
+                            },
+                            "mother_occupation_id": {
+                              "type": "int",
+                              "example": null
+                            },
+                            "mother_nationality_id": {
+                              "type": "int",
+                              "example": null
+                            },
+                            "mother_phone_number": {
+                              "type": "string",
+                              "example": null
+                            },
+                            "guardian_prefix_id": {
+                              "type": "int",
+                              "example": null
+                            },
+                            "guardian_first_name_thai": {
+                              "type": "string",
+                              "example": null
+                            },
+                            "guardian_last_name_thai": {
+                              "type": "string",
+                              "example": null
+                            },
+                            "guardian_national_id": {
+                              "type": "int",
+                              "example": null
+                            },
+                            "guardian_relation_to_student_id": {
+                              "type": "int",
+                              "example": null
+                            },
+                            "guardian_phone_number": {
+                              "type": "string",
+                              "example": null
+                            },
+                            "guardian_occupation_id": {
+                              "type": "int",
+                              "example": null
+                            },
+                            "guardian_nationality_id": {
+                              "type": "int",
+                              "example": null
+                            },
+                            "guardian_house_number": {
+                              "type": "string",
+                              "example": null
+                            },
+                            "guardian_village_group": {
+                              "type": "string",
+                              "example": null
+                            },
+                            "guardian_sub_district_id": {
+                              "type": "int",
+                              "example": null
+                            },
+                            "guardian_district_id": {
+                              "type": "int",
+                              "example": null
+                            },
+                            "guardian_province_id": {
+                              "type": "int",
+                              "example": null
+                            },
+                            "image": {
+                              "type": "object",
+                              "data": {
+                                "type": "array",
+                                "example": 100
+                              }
+                            },
+                            "student_status_id": {
+                              "type": "int",
+                              "example": 1
+                            },
+                            "created_at": {
+                              "type": "timestamp",
+                              "example": "2025-03-06 21:34:25"
+                            },
+                            "created_by": {
+                              "type": "string",
+                              "example": "admin"
+                            },
+                            "updated_at": {
+                              "type": "timestamp",
+                              "example": "2025-03-06 21:34:25"
+                            },
+                            "updated_by": {
+                              "type": "string",
+                              "example": "admin"
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "400": {
+              "description": "Server ไม่สามารถประมวลผลคำร้องขอเนื่องจากข้อผิดพลาดของ Client",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "object",
+                    "properties": {
+                      "message": {
+                        "type": "string",
+                        "example": "Tokenไม่อนุญาติให้ใช้งาน!"
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "401": {
+              "description": "การรับรองความถูกต้องล้มเหลว",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "object",
+                    "properties": {
+                      "message": {
+                        "type": "string",
+                        "example": "ไม่มีการยืนยันตัวตนด้วย OTP กรุณายืนยันตัวตนก่อนใช้งานระบบ! || Token ไม่ถูกต้อง! || Token นี้ไม่มีสิทธิ์การใช้งาน! || TokenExpiredError! || JsonWebTokenError!"
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "404": {
+              "description": "Resource ไม่พบ",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "object",
+                    "properties": {
+                      "message": {
+                        "type": "string",
+                        "example": "No data found"
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "500": {
+              "description": "ข้อผิดพลาดเซิร์ฟเวอร์",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "object",
+                    "properties": {
+                      "message": {
+                        "type": "string",
+                        "example": "internal server errors"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "/apiv2/registerStudent": {
+        "post": {
+          "tags": [
+            "Student"
+          ],
+          "summary": "สำหรับบันทึกข้อมูล Student",
+          "description": "สำหรับบันทึกข้อมูลทั้งหมดของ Student",
+          "parameters": [
+            {
+              "name": "Authorization",
+              "in": "header",
+              "required": true,
+              "schema": {
+                "type": "string",
+                "example": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+              },
+              "description": "Token จากการล็อกอิน ส่งในรูปแบบ Bearer Token"
+            }
+          ],
+          "requestBody": {
+            "required": true,
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "prefix_id": {
+                      "type": "int",
+                      "example": 1
+                    },
+                    "first_name_thai": {
+                      "type": "string",
+                      "example": "ดำสนิท"
+                    },
+                    "last_name_thai": {
+                      "type": "string",
+                      "example": "สิดส่ายหน้า"
+                    },
+                    "first_name_english": {
+                      "type": "string",
+                      "example": "dumsnid"
+                    },
+                    "last_name_english": {
+                      "type": "string",
+                      "example": "sidsaina"
+                    },
+                    "national_id": {
+                      "type": "string",
+                      "example": "1234567891234"
+                    },
+                    "date_of_birth": {
+                      "type": "date",
+                      "example": "1996-11-09T17:00:00.000Z"
+                    },
+                    "gender_id": {
+                      "type": "int",
+                      "example": 1
+                    },
+                    "nationality_id": {
+                      "type": "int",
+                      "example": 1
+                    },
+                    "ethnicity_id": {
+                      "type": "int",
+                      "example": 1
+                    },
+                    "religion_id": {
+                      "type": "int",
+                      "example": 1
+                    },
+                    "phone_number": {
+                      "type": "string",
+                      "example": "0871234561"
+                    },
+                    "email": {
+                      "type": "string",
+                      "example": "student@gmail.com"
+                    },
+                    "house_number": {
+                      "type": "string",
+                      "example": "13"
+                    },
+                    "village_group": {
+                      "type": "string",
+                      "example": "13"
+                    },
+                    "sub_district_id": {
+                      "type": "int",
+                      "example": 3908
+                    },
+                    "district_id": {
+                      "type": "int",
+                      "example": 493
+                    },
+                    "province_id": {
+                      "type": "int",
+                      "example": 36
+                    },
+                    "student_code": {
+                      "type": "string",
+                      "example": "S00001"
+                    },
+                    "enrollment_term_id": {
+                      "type": "int",
+                      "example": 1
+                    },
+                    "educational_institution_id": {
+                      "type": "int",
+                      "example": 1
+                    },
+                    "education_level_id": {
+                      "type": "int",
+                      "example": 1
+                    },
+                    "father_prefix_id": {
+                      "type": "int",
+                      "example": null
+                    },
+                    "father_first_name_thai": {
+                      "type": "string",
+                      "example": null
+                    },
+                    "father_last_name_thai": {
+                      "type": "string",
+                      "example": null
+                    },
+                    "father_national_id": {
+                      "type": "int",
+                      "example": null
+                    },
+                    "father_marital_status_id": {
+                      "type": "int",
+                      "example": null
+                    },
+                    "father_occupation_id": {
+                      "type": "int",
+                      "example": null
+                    },
+                    "father_nationality_id": {
+                      "type": "int",
+                      "example": null
+                    },
+                    "father_phone_number": {
+                      "type": "string",
+                      "example": null
+                    },
+                    "mother_prefix_id": {
+                      "type": "int",
+                      "example": null
+                    },
+                    "mother_first_name_thai": {
+                      "type": "string",
+                      "example": null
+                    },
+                    "mother_last_name_thai": {
+                      "type": "string",
+                      "example": null
+                    },
+                    "mother_national_id": {
+                      "type": "int",
+                      "example": null
+                    },
+                    "mother_marital_status_id": {
+                      "type": "int",
+                      "example": null
+                    },
+                    "mother_occupation_id": {
+                      "type": "int",
+                      "example": null
+                    },
+                    "mother_nationality_id": {
+                      "type": "int",
+                      "example": null
+                    },
+                    "mother_phone_number": {
+                      "type": "string",
+                      "example": null
+                    },
+                    "guardian_prefix_id": {
+                      "type": "int",
+                      "example": null
+                    },
+                    "guardian_first_name_thai": {
+                      "type": "string",
+                      "example": null
+                    },
+                    "guardian_last_name_thai": {
+                      "type": "string",
+                      "example": null
+                    },
+                    "guardian_national_id": {
+                      "type": "int",
+                      "example": null
+                    },
+                    "guardian_relation_to_student_id": {
+                      "type": "int",
+                      "example": null
+                    },
+                    "guardian_phone_number": {
+                      "type": "string",
+                      "example": null
+                    },
+                    "guardian_occupation_id": {
+                      "type": "int",
+                      "example": null
+                    },
+                    "guardian_nationality_id": {
+                      "type": "int",
+                      "example": null
+                    },
+                    "guardian_house_number": {
+                      "type": "string",
+                      "example": null
+                    },
+                    "guardian_village_group": {
+                      "type": "string",
+                      "example": null
+                    },
+                    "guardian_sub_district_id": {
+                      "type": "int",
+                      "example": null
+                    },
+                    "guardian_district_id": {
+                      "type": "int",
+                      "example": null
+                    },
+                    "guardian_province_id": {
+                      "type": "int",
+                      "example": null
+                    },
+                    "image": {
+                      "type": "blob",
+                      "example": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/wcAAgAB/1h1ZAAAAABJRU5ErkJggg==" 
+                    },
+                    "student_status_id": {
+                      "type": "int",
+                      "example": 1
+                    }
+                  },
+                  "required": [
+                    "subject_type",
+                    "career_group",
+                    "field_of_study",
+                    "education_level_id"
+                  ]
+                }
+              }
+            }
+          },
+          "responses": {
+            "200": {
+              "description": "ความสำเร็จทั่วไป",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "object",
+                    "properties": {
+                      "message": {
+                        "type": "string",
+                        "example": "Register student successfully!"
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "400": {
+              "description": "ข้อมูลจาก Client ไม่ถูกต้อง",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "object",
+                    "properties": {
+                      "message": {
+                        "type": "string",
+                        "example": "Tokenไม่อนุญาติให้ใช้งาน!"
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "401": {
+              "description": "การรับรองความถูกต้องล้มเหลว",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "object",
+                    "properties": {
+                      "message": {
+                        "type": "string",
+                        "example": "ไม่มีการยืนยันตัวตนด้วย OTP กรุณายืนยันตัวตนก่อนใช้งานระบบ! || Token ไม่ถูกต้อง! || Token นี้ไม่มีสิทธิ์การใช้งาน! || TokenExpiredError! || JsonWebTokenError!"
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "409": {
+              "description": "คำร้องขอไม่สามารถดำเนินการได้เนื่องจากขัดแย้งกับสถานะปัจจุบันของทรัพยากรที่ต้องการอัพเดท",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "object",
+                    "properties": {
+                      "message": {
+                        "type": "string",
+                        "example": "( ${value} ) มีข้อมูลในระบบแล้ว ไม่อนุญาตให้บันทึกข้อมูลซ้ำ!"
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "500": {
+              "description": "ข้อผิดพลาดเซิร์ฟเวอร์",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "object",
+                    "properties": {
+                      "message": {
+                        "type": "string",
+                        "example": "internal server errors"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "/apiv2/updateStudent/{id}": {
+        "put": {
+          "tags": [
+            "Student"
+          ],
+          "summary": "สำหรับอัพเดทข้อมูล Student",
+          "description": "สำหรับอัพเดทข้อมูลทั้งหมดของ Student",
+          "parameters": [
+            {
+              "name": "Authorization",
+              "in": "header",
+              "required": true,
+              "schema": {
+                "type": "string",
+                "example": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+              },
+              "description": "Token จากการล็อกอิน ส่งในรูปแบบ Bearer Token"
+            },
+            {
+              "name": "id",
+              "in": "path",
+              "required": true,
+              "schema": {
+                "type": "integer",
+                "example": 1
+              },
+              "description": "ID ของ Student ที่ต้องการอัพเดท"
+            }
+          ],
+          "requestBody": {
+            "required": true,
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "prefix_id": {
+                      "type": "int",
+                      "example": 1
+                    },
+                    "first_name_thai": {
+                      "type": "string",
+                      "example": "ดำสนิท"
+                    },
+                    "last_name_thai": {
+                      "type": "string",
+                      "example": "สิดส่ายหน้า"
+                    },
+                    "first_name_english": {
+                      "type": "string",
+                      "example": "dumsnid"
+                    },
+                    "last_name_english": {
+                      "type": "string",
+                      "example": "sidsaina"
+                    },
+                    "national_id": {
+                      "type": "string",
+                      "example": "1234567891234"
+                    },
+                    "date_of_birth": {
+                      "type": "date",
+                      "example": "1996-11-09T17:00:00.000Z"
+                    },
+                    "gender_id": {
+                      "type": "int",
+                      "example": 1
+                    },
+                    "nationality_id": {
+                      "type": "int",
+                      "example": 1
+                    },
+                    "ethnicity_id": {
+                      "type": "int",
+                      "example": 1
+                    },
+                    "religion_id": {
+                      "type": "int",
+                      "example": 1
+                    },
+                    "phone_number": {
+                      "type": "string",
+                      "example": "0871234561"
+                    },
+                    "email": {
+                      "type": "string",
+                      "example": "student@gmail.com"
+                    },
+                    "house_number": {
+                      "type": "string",
+                      "example": "13"
+                    },
+                    "village_group": {
+                      "type": "string",
+                      "example": "13"
+                    },
+                    "sub_district_id": {
+                      "type": "int",
+                      "example": 3908
+                    },
+                    "district_id": {
+                      "type": "int",
+                      "example": 493
+                    },
+                    "province_id": {
+                      "type": "int",
+                      "example": 36
+                    },
+                    "student_code": {
+                      "type": "string",
+                      "example": "S00001"
+                    },
+                    "enrollment_term_id": {
+                      "type": "int",
+                      "example": 1
+                    },
+                    "educational_institution_id": {
+                      "type": "int",
+                      "example": 1
+                    },
+                    "education_level_id": {
+                      "type": "int",
+                      "example": 1
+                    },
+                    "father_prefix_id": {
+                      "type": "int",
+                      "example": null
+                    },
+                    "father_first_name_thai": {
+                      "type": "string",
+                      "example": null
+                    },
+                    "father_last_name_thai": {
+                      "type": "string",
+                      "example": null
+                    },
+                    "father_national_id": {
+                      "type": "int",
+                      "example": null
+                    },
+                    "father_marital_status_id": {
+                      "type": "int",
+                      "example": null
+                    },
+                    "father_occupation_id": {
+                      "type": "int",
+                      "example": null
+                    },
+                    "father_nationality_id": {
+                      "type": "int",
+                      "example": null
+                    },
+                    "father_phone_number": {
+                      "type": "string",
+                      "example": null
+                    },
+                    "mother_prefix_id": {
+                      "type": "int",
+                      "example": null
+                    },
+                    "mother_first_name_thai": {
+                      "type": "string",
+                      "example": null
+                    },
+                    "mother_last_name_thai": {
+                      "type": "string",
+                      "example": null
+                    },
+                    "mother_national_id": {
+                      "type": "int",
+                      "example": null
+                    },
+                    "mother_marital_status_id": {
+                      "type": "int",
+                      "example": null
+                    },
+                    "mother_occupation_id": {
+                      "type": "int",
+                      "example": null
+                    },
+                    "mother_nationality_id": {
+                      "type": "int",
+                      "example": null
+                    },
+                    "mother_phone_number": {
+                      "type": "string",
+                      "example": null
+                    },
+                    "guardian_prefix_id": {
+                      "type": "int",
+                      "example": null
+                    },
+                    "guardian_first_name_thai": {
+                      "type": "string",
+                      "example": null
+                    },
+                    "guardian_last_name_thai": {
+                      "type": "string",
+                      "example": null
+                    },
+                    "guardian_national_id": {
+                      "type": "int",
+                      "example": null
+                    },
+                    "guardian_relation_to_student_id": {
+                      "type": "int",
+                      "example": null
+                    },
+                    "guardian_phone_number": {
+                      "type": "string",
+                      "example": null
+                    },
+                    "guardian_occupation_id": {
+                      "type": "int",
+                      "example": null
+                    },
+                    "guardian_nationality_id": {
+                      "type": "int",
+                      "example": null
+                    },
+                    "guardian_house_number": {
+                      "type": "string",
+                      "example": null
+                    },
+                    "guardian_village_group": {
+                      "type": "string",
+                      "example": null
+                    },
+                    "guardian_sub_district_id": {
+                      "type": "int",
+                      "example": null
+                    },
+                    "guardian_district_id": {
+                      "type": "int",
+                      "example": null
+                    },
+                    "guardian_province_id": {
+                      "type": "int",
+                      "example": null
+                    },
+                    "image": {
+                      "type": "blob",
+                      "example": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/wcAAgAB/1h1ZAAAAABJRU5ErkJggg==" 
+                    },
+                    "student_status_id": {
+                      "type": "int",
+                      "example": 1
+                    }
+                  },
+                  "required": [
+                    "subject_type",
+                    "career_group",
+                    "field_of_study",
+                    "education_level_id"
+                  ]
+                }
+              }
+            }
+          },
+          "responses": {
+            "200": {
+              "description": "ความสำเร็จทั่วไป",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "object",
+                    "properties": {
+                      "message": {
+                        "type": "string",
+                        "example": "Update student successfully!"
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "400": {
+              "description": "ข้อมูลจาก Client ไม่ถูกต้อง",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "object",
+                    "properties": {
+                      "message": {
+                        "type": "string",
+                        "example": "Tokenไม่อนุญาติให้ใช้งาน!"
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "401": {
+              "description": "การรับรองความถูกต้องล้มเหลว",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "object",
+                    "properties": {
+                      "message": {
+                        "type": "string",
+                        "example": "ไม่มีการยืนยันตัวตนด้วย OTP กรุณายืนยันตัวตนก่อนใช้งานระบบ! || Token ไม่ถูกต้อง! || Token นี้ไม่มีสิทธิ์การใช้งาน! || TokenExpiredError! || JsonWebTokenError!"
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "404": {
+              "description": "Resource ไม่พบ( Not found )",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "object",
+                    "properties": {
+                      "message": {
+                        "type": "string",
+                        "example": "ไม่มีข้อมูลนักศึกษา!"
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "409": {
+              "description": "คำร้องขอไม่สามารถดำเนินการได้เนื่องจากขัดแย้งกับสถานะปัจจุบันของทรัพยากรที่ต้องการอัพเดท",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "object",
+                    "properties": {
+                      "message": {
+                        "type": "string",
+                        "example": "( ${value} ) มีข้อมูลในระบบแล้ว ไม่อนุญาตให้บันทึกข้อมูลซ้ำ!"
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "500": {
+              "description": "ข้อผิดพลาดเซิร์ฟเวอร์",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "object",
+                    "properties": {
+                      "message": {
+                        "type": "string",
+                        "example": "internal server errors"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "/apiv2/removerStudent/{id}": {
+        "delete": {
+          "tags": [
+            "Student"
+          ],
+          "summary": "สำหรับลบข้อมูล Student",
+          "description": "สำหรับลบข้อมูลทั้งหมดของ Student",
+          "parameters": [
+            {
+              "name": "Authorization",
+              "in": "header",
+              "required": true,
+              "schema": {
+                "type": "string",
+                "example": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+              },
+              "description": "Token จากการล็อกอิน ส่งในรูปแบบ Bearer Token"
+            },
+            {
+              "name": "id",
+              "in": "path",
+              "required": true,
+              "schema": {
+                "type": "integer",
+                "example": 1
+              },
+              "description": "ID ของ Student ที่ต้องการลบ"
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "ความสำเร็จทั่วไป",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "object",
+                    "properties": {
+                      "message": {
+                        "type": "string",
+                        "example": "ลบข้อมูลเสร็จสิ้น!"
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "400": {
+              "description": "ข้อมูลจาก Client ไม่ถูกต้อง",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "object",
+                    "properties": {
+                      "message": {
+                        "type": "string",
+                        "example": "Tokenไม่อนุญาติให้ใช้งาน! || ไม่สามารถลบข้อมูลตัวเองได้!"
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "401": {
+              "description": "การรับรองความถูกต้องล้มเหลว",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "object",
+                    "properties": {
+                      "message": {
+                        "type": "string",
+                        "example": "ไม่มีการยืนยันตัวตนด้วย OTP กรุณายืนยันตัวตนก่อนใช้งานระบบ! || Token ไม่ถูกต้อง! || Token นี้ไม่มีสิทธิ์การใช้งาน! || TokenExpiredError! || JsonWebTokenError!"
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "404": {
+              "description": "Resource ไม่พบ( Not found )",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "object",
+                    "properties": {
+                      "message": {
+                        "type": "string",
+                        "example": "ไม่มี ( ${studentId} ) อยู่ในระบบ!"
                       }
                     }
                   }

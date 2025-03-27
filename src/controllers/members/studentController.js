@@ -24,6 +24,7 @@ exports.getAllDataStudents = async (req, res) => {
 exports.registerDataStudent = async (req, res) => {
     try {
         const studentData = req.body;
+        const deplicateStatus = [];
         const duplicateMessages = [];
         let enrollment_age = null;
         let thaiDate = null;
@@ -40,7 +41,10 @@ exports.registerDataStudent = async (req, res) => {
                 // ตรวจสอบค่าซ้ำเฉพาะฟิลด์สำคัญ
                 if (["national_id", "email", "student_code"].includes(key) && value) {
                     const [rows] = await db.query(`SELECT * FROM students WHERE ${key} = ? LIMIT 1`, [value]);
-                    if (rows.length > 0) duplicateMessages.push(`( ${value} ) มีข้อมูลในระบบแล้ว ไม่อนุญาตให้บันทึกข้อมูลซ้ำ!`);
+                    if (rows.length > 0) {
+                        deplicateStatus.push(409);
+                        duplicateMessages.push(`( ${value} ) มีข้อมูลในระบบแล้ว ไม่อนุญาตให้บันทึกข้อมูลซ้ำ!`);
+                    }
                 }
 
                 // คำนวณอายุจากวันเกิด
@@ -53,7 +57,7 @@ exports.registerDataStudent = async (req, res) => {
         );
 
         // ถ้ามีข้อมูลซ้ำ ให้แจ้งเตือน
-        if (duplicateMessages.length > 0) return msg(res, 409, { message: duplicateMessages.join(" AND ") });
+        if (duplicateMessages.length > 0) return msg(res, Math.max(...deplicateStatus), { message: duplicateMessages.join(" AND ") });
 
         // เพิ่มค่าอายุเข้าไปใน studentData
         studentData.enrollment_age = enrollment_age;
@@ -103,6 +107,7 @@ exports.updateDataStudent = async (req, res) => {
     try {
         const studentId = req.params.id;
         const studentData = req.body;
+        const deplicateStatus = [];
         const duplicateMessages = [];
         let enrollment_age = null;
 
@@ -119,7 +124,10 @@ exports.updateDataStudent = async (req, res) => {
             Object.entries(studentData).map(async ([key, value]) => {
                 if (["national_id", "email", "student_code"].includes(key) && value) {
                     const [rows] = await db.query(`SELECT id FROM students WHERE ${key} = ? LIMIT 1`, [value]);
-                    if (rows.length > 0) duplicateMessages.push(`( ${value} ) มีข้อมูลในระบบแล้ว ไม่อนุญาตให้บันทึกข้อมูลซ้ำ!`);
+                    if (rows.length > 0) {
+                        deplicateStatus.push(409);
+                        duplicateMessages.push(`( ${value} ) มีข้อมูลในระบบแล้ว ไม่อนุญาตให้บันทึกข้อมูลซ้ำ!`);
+                    }
                 }
 
                 // คำนวณอายุจากวันเกิด
@@ -130,7 +138,7 @@ exports.updateDataStudent = async (req, res) => {
             })
         );
 
-        if (duplicateMessages.length > 0) return msg(res, 409, { message: duplicateMessages.join(" AND ") });
+        if (duplicateMessages.length > 0) return msg(res, Math.max(...deplicateStatus), { message: duplicateMessages.join(" AND ") });
 
         // เพิ่มค่าอายุเข้าไปใน studentData
         studentData.enrollment_age = enrollment_age;
