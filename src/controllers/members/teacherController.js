@@ -94,7 +94,7 @@ exports.registerDataTeacher = async (req, res) => {
         console.error("Error registerTeacherData data:", error.message);
         return msg(res, 500, "Internal Server Error");
     }
-}
+};
 
 // ใช้สำหรับอัพเดทข้อมูล Teacher( ข้อมูลอาจารย์ )
 exports.updateDataTeacher = async (req, res) => {
@@ -206,4 +206,4 @@ exports.removeDataTeacher = async (req, res) => {
         console.log(err);
         return msg(res, 500, err);
     }
-}
+};

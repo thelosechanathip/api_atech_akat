@@ -1,12 +1,13 @@
 const express = require('express');
 const router = express.Router();
 const { authCheckAdmin } = require('../middleware/accountInformations/authMiddleware.js');
-const { getAllDataStudents, registerDataStudent, updateDataStudent, removeDataStudent } = require('../controllers/members/studentController');
+const { getAllDataStudents, registerDataStudent, checkUniqueDataStudent, updateDataStudent, removeDataStudent } = require('../controllers/members/studentController');
 const { getAllDataTeachers, registerDataTeacher, updateDataTeacher, removeDataTeacher } = require('../controllers/members/teacherController');
 const { getAllDataAdmin, addDataAdmin, updateDataAdmin, removeDataAdmin } = require('../controllers/members/adminController');
 
 // @ENDPOINT = http://localhost:5000/apiv2/student { student }
 router.get('/getStudents', authCheckAdmin, getAllDataStudents);
+router.get('/checkUniqueStudent', authCheckAdmin, checkUniqueDataStudent);
 router.post('/registerStudent', authCheckAdmin, registerDataStudent);
 router.put('/updateStudent/:id', authCheckAdmin, updateDataStudent);
 router.delete('/removerStudent/:id', authCheckAdmin, removeDataStudent);

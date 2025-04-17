@@ -111,9 +111,158 @@
       {
         "name": "Student",
         "description": "Endpoints สำหรับการจัดการตาราง students( ตารางเก็บข้อมูลนักศึกษา )"
+      },
+      {
+        "name": "Teacher",
+        "description": "Endpoints สำหรับการจัดการตาราง teachers( ตารางเก็บข้อมูลอาจารย์ )"
+      },
+      {
+        "name": "Admin",
+        "description": "Endpoints สำหรับการจัดการตาราง admins( ตารางเก็บข้อมูลผู้ดูแลระบบ )"
       }
     ],
     "paths": {
+      "/apiv2/authGetUsers": {
+        "get": {
+          "tags": [
+            "Auth"
+          ],
+          "summary": "สำหรับดึงข้อมูล Auth",
+          "description": "สำหรับดึงข้อมูลทั้งหมดของ Auth",
+          "parameters": [
+            {
+              "name": "Authorization",
+              "in": "header",
+              "required": true,
+              "schema": {
+                "type": "string",
+                "example": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+              },
+              "description": "Token จากการล็อกอิน ส่งในรูปแบบ Bearer Token"
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "ความสำเร็จทั่วไป",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "object",
+                    "properties": {
+                      "message": {
+                        "type": "array",
+                        "items": {
+                          "type": "object",
+                          "properties": {
+                            "id": {
+                              "type": "integer",
+                              "example": 1
+                            },
+                            "username": {
+                              "type": "string",
+                              "example": "1234567891234"
+                            },
+                            "password": {
+                              "type": "string",
+                              "format": "password",
+                              "example": "P@ssw0rd!",
+                              "description": "รหัสผ่านต้องมีตัวพิมพ์ใหญ่ พิมพ์เล็ก ตัวเลข และอักขระพิเศษ"
+                            },
+                            "enabled": {
+                              "type": "boolean",
+                              "example": "true | false"
+                            },
+                            "created_at": {
+                              "type": "timestamp",
+                              "example": "2025-03-06 21:34:25"
+                            },
+                            "created_by": {
+                              "type": "string",
+                              "example": "admin"
+                            },
+                            "updated_at": {
+                              "type": "timestamp",
+                              "example": "2025-03-06 21:34:25"
+                            },
+                            "updated_by": {
+                              "type": "string",
+                              "example": "admin"
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "400": {
+              "description": "Server ไม่สามารถประมวลผลคำร้องขอเนื่องจากข้อผิดพลาดของ Client",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "object",
+                    "properties": {
+                      "message": {
+                        "type": "string",
+                        "example": "Tokenไม่อนุญาติให้ใช้งาน!"
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "401": {
+              "description": "การรับรองความถูกต้องล้มเหลว",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "object",
+                    "properties": {
+                      "message": {
+                        "type": "string",
+                        "example": "ไม่มีการยืนยันตัวตนด้วย OTP กรุณายืนยันตัวตนก่อนใช้งานระบบ! || Token ไม่ถูกต้อง! || Token นี้ไม่มีสิทธิ์การใช้งาน! || TokenExpiredError! || JsonWebTokenError!"
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "404": {
+              "description": "Resource ไม่พบ",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "object",
+                    "properties": {
+                      "message": {
+                        "type": "string",
+                        "example": "No data found"
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "500": {
+              "description": "ข้อผิดพลาดเซิร์ฟเวอร์",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "object",
+                    "properties": {
+                      "message": {
+                        "type": "string",
+                        "example": "internal server errors"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
       "/apiv2/authRegister": {
         "post": {
           "tags": [
@@ -12904,10 +13053,9 @@
                     }
                   },
                   "required": [
-                    "subject_type",
-                    "career_group",
-                    "field_of_study",
-                    "education_level_id"
+                    "national_id",
+                    "email",
+                    "student_code"
                   ]
                 }
               }
@@ -13444,6 +13592,1418 @@
                       "message": {
                         "type": "string",
                         "example": "ไม่มี ( ${studentId} ) อยู่ในระบบ!"
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "500": {
+              "description": "ข้อผิดพลาดเซิร์ฟเวอร์",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "object",
+                    "properties": {
+                      "message": {
+                        "type": "string",
+                        "example": "internal server errors"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "/apiv2/getTeachers": {
+        "get": {
+          "tags": [
+            "Teacher"
+          ],
+          "summary": "สำหรับดึงข้อมูล Teacher",
+          "description": "สำหรับดึงข้อมูลทั้งหมดของ Teacher",
+          "parameters": [
+            {
+              "name": "Authorization",
+              "in": "header",
+              "required": true,
+              "schema": {
+                "type": "string",
+                "example": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+              },
+              "description": "Token จากการล็อกอิน ส่งในรูปแบบ Bearer Token"
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "ความสำเร็จทั่วไป",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "object",
+                    "properties": {
+                      "message": {
+                        "type": "array",
+                        "items": {
+                          "type": "object",
+                          "properties": {
+                            "id": {
+                              "type": "integer",
+                              "example": 1
+                            },
+                            "prefix_id": {
+                              "type": "int",
+                              "example": 1
+                            },
+                            "first_name_thai": {
+                              "type": "string",
+                              "example": "ดำสนิท"
+                            },
+                            "last_name_thai": {
+                              "type": "string",
+                              "example": "สิดส่ายหน้า"
+                            },
+                            "first_name_english": {
+                              "type": "string",
+                              "example": "dumsnid"
+                            },
+                            "last_name_english": {
+                              "type": "string",
+                              "example": "sidsaina"
+                            },
+                            "enrollment_age": {
+                              "type": "string",
+                              "example": "28"
+                            },
+                            "nationality_id": {
+                              "type": "int",
+                              "example": 1
+                            },
+                            "ethnicity_id": {
+                              "type": "int",
+                              "example": 1
+                            },
+                            "religion_id": {
+                              "type": "int",
+                              "example": 1
+                            },
+                            "gender_id": {
+                              "type": "int",
+                              "example": 1
+                            },
+                            "national_id": {
+                              "type": "string",
+                              "example": "1234567891234"
+                            },
+                            "date_of_birth": {
+                              "type": "date",
+                              "example": "1996-11-09T17:00:00.000Z"
+                            },
+                            "phone_number": {
+                              "type": "string",
+                              "example": "0871234561"
+                            },
+                            "email": {
+                              "type": "string",
+                              "example": "student@gmail.com"
+                            },
+                            "house_number": {
+                              "type": "string",
+                              "example": "13"
+                            },
+                            "village_group": {
+                              "type": "string",
+                              "example": "13"
+                            },
+                            "sub_district_id": {
+                              "type": "int",
+                              "example": 3908
+                            },
+                            "district_id": {
+                              "type": "int",
+                              "example": 493
+                            },
+                            "province_id": {
+                              "type": "int",
+                              "example": 36
+                            },
+                            "education_level_id": {
+                              "type": "int",
+                              "example": 1
+                            },
+                            "specialization_id": {
+                              "type": "int",
+                              "example": 1
+                            },
+                            "educational_institution_id": {
+                              "type": "int",
+                              "example": 1
+                            },
+                            "position_id": {
+                              "type": "int",
+                              "example": 1
+                            },
+                            "image": {
+                              "type": "object",
+                              "data": {
+                                "type": "array",
+                                "example": 100
+                              }
+                            },
+                            "teacher_status_id": {
+                              "type": "int",
+                              "example": 1
+                            },
+                            "created_at": {
+                              "type": "timestamp",
+                              "example": "2025-03-06 21:34:25"
+                            },
+                            "created_by": {
+                              "type": "string",
+                              "example": "admin"
+                            },
+                            "updated_at": {
+                              "type": "timestamp",
+                              "example": "2025-03-06 21:34:25"
+                            },
+                            "updated_by": {
+                              "type": "string",
+                              "example": "admin"
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "400": {
+              "description": "Server ไม่สามารถประมวลผลคำร้องขอเนื่องจากข้อผิดพลาดของ Client",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "object",
+                    "properties": {
+                      "message": {
+                        "type": "string",
+                        "example": "Tokenไม่อนุญาติให้ใช้งาน!"
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "401": {
+              "description": "การรับรองความถูกต้องล้มเหลว",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "object",
+                    "properties": {
+                      "message": {
+                        "type": "string",
+                        "example": "ไม่มีการยืนยันตัวตนด้วย OTP กรุณายืนยันตัวตนก่อนใช้งานระบบ! || Token ไม่ถูกต้อง! || Token นี้ไม่มีสิทธิ์การใช้งาน! || TokenExpiredError! || JsonWebTokenError!"
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "404": {
+              "description": "Resource ไม่พบ",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "object",
+                    "properties": {
+                      "message": {
+                        "type": "string",
+                        "example": "No data found"
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "500": {
+              "description": "ข้อผิดพลาดเซิร์ฟเวอร์",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "object",
+                    "properties": {
+                      "message": {
+                        "type": "string",
+                        "example": "internal server errors"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "/apiv2/registerTeacher": {
+        "post": {
+          "tags": [
+            "Teacher"
+          ],
+          "summary": "สำหรับบันทึกข้อมูล Teacher",
+          "description": "สำหรับบันทึกข้อมูลทั้งหมดของ Teacher",
+          "parameters": [
+            {
+              "name": "Authorization",
+              "in": "header",
+              "required": true,
+              "schema": {
+                "type": "string",
+                "example": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+              },
+              "description": "Token จากการล็อกอิน ส่งในรูปแบบ Bearer Token"
+            }
+          ],
+          "requestBody": {
+            "required": true,
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "prefix_id": {
+                      "type": "int",
+                      "example": 1
+                    },
+                    "first_name_thai": {
+                      "type": "string",
+                      "example": "ดำสนิท"
+                    },
+                    "last_name_thai": {
+                      "type": "string",
+                      "example": "สิดส่ายหน้า"
+                    },
+                    "first_name_english": {
+                      "type": "string",
+                      "example": "dumsnid"
+                    },
+                    "last_name_english": {
+                      "type": "string",
+                      "example": "sidsaina"
+                    },
+                    "nationality_id": {
+                      "type": "int",
+                      "example": 1
+                    },
+                    "ethnicity_id": {
+                      "type": "int",
+                      "example": 1
+                    },
+                    "religion_id": {
+                      "type": "int",
+                      "example": 1
+                    },
+                    "gender_id": {
+                      "type": "int",
+                      "example": 1
+                    },
+                    "national_id": {
+                      "type": "string",
+                      "example": "1234567891234"
+                    },
+                    "date_of_birth": {
+                      "type": "date",
+                      "example": "1996-11-10"
+                    },
+                    "phone_number": {
+                      "type": "string",
+                      "example": "0871234561"
+                    },
+                    "email": {
+                      "type": "string",
+                      "example": "teacher@gmail.com"
+                    },
+                    "house_number": {
+                      "type": "string",
+                      "example": "13"
+                    },
+                    "village_group": {
+                      "type": "string",
+                      "example": "13"
+                    },
+                    "sub_district_id": {
+                      "type": "int",
+                      "example": 3908
+                    },
+                    "district_id": {
+                      "type": "int",
+                      "example": 493
+                    },
+                    "province_id": {
+                      "type": "int",
+                      "example": 36
+                    },
+                    "education_level_id": {
+                      "type": "int",
+                      "example": 1
+                    },
+                    "specialization_id": {
+                      "type": "int",
+                      "example": 1
+                    },
+                    "educational_institution_id": {
+                      "type": "int",
+                      "example": 1
+                    },
+                    "position_id": {
+                      "type": "int",
+                      "example": 1
+                    },
+                    "image": {
+                      "type": "blob",
+                      "example": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/wcAAgAB/1h1ZAAAAABJRU5ErkJggg==" 
+                    },
+                    "teacher_status_id": {
+                      "type": "int",
+                      "example": 1
+                    }
+                  },
+                  "required": [
+                    "national_id",
+                    "email"
+                  ]
+                }
+              }
+            }
+          },
+          "responses": {
+            "200": {
+              "description": "ความสำเร็จทั่วไป",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "object",
+                    "properties": {
+                      "message": {
+                        "type": "string",
+                        "example": "Register teacher successfully!"
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "400": {
+              "description": "ข้อมูลจาก Client ไม่ถูกต้อง",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "object",
+                    "properties": {
+                      "message": {
+                        "type": "string",
+                        "example": "Tokenไม่อนุญาติให้ใช้งาน!"
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "401": {
+              "description": "การรับรองความถูกต้องล้มเหลว",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "object",
+                    "properties": {
+                      "message": {
+                        "type": "string",
+                        "example": "ไม่มีการยืนยันตัวตนด้วย OTP กรุณายืนยันตัวตนก่อนใช้งานระบบ! || Token ไม่ถูกต้อง! || Token นี้ไม่มีสิทธิ์การใช้งาน! || TokenExpiredError! || JsonWebTokenError!"
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "409": {
+              "description": "คำร้องขอไม่สามารถดำเนินการได้เนื่องจากขัดแย้งกับสถานะปัจจุบันของทรัพยากรที่ต้องการอัพเดท",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "object",
+                    "properties": {
+                      "message": {
+                        "type": "string",
+                        "example": "( ${value} ) มีข้อมูลในระบบแล้ว ไม่อนุญาตให้บันทึกข้อมูลซ้ำ!"
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "500": {
+              "description": "ข้อผิดพลาดเซิร์ฟเวอร์",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "object",
+                    "properties": {
+                      "message": {
+                        "type": "string",
+                        "example": "internal server errors"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "/apiv2/updateTeacher/{id}": {
+        "put": {
+          "tags": [
+            "Teacher"
+          ],
+          "summary": "สำหรับอัพเดทข้อมูล Teacher",
+          "description": "สำหรับอัพเดทข้อมูลทั้งหมดของ Teacher",
+          "parameters": [
+            {
+              "name": "Authorization",
+              "in": "header",
+              "required": true,
+              "schema": {
+                "type": "string",
+                "example": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+              },
+              "description": "Token จากการล็อกอิน ส่งในรูปแบบ Bearer Token"
+            },
+            {
+              "name": "id",
+              "in": "path",
+              "required": true,
+              "schema": {
+                "type": "integer",
+                "example": 1
+              },
+              "description": "ID ของ Teacher ที่ต้องการอัพเดท"
+            }
+          ],
+          "requestBody": {
+            "required": true,
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "prefix_id": {
+                      "type": "int",
+                      "example": 1
+                    },
+                    "first_name_thai": {
+                      "type": "string",
+                      "example": "ดำสนิท"
+                    },
+                    "last_name_thai": {
+                      "type": "string",
+                      "example": "สิดส่ายหน้า"
+                    },
+                    "first_name_english": {
+                      "type": "string",
+                      "example": "dumsnid"
+                    },
+                    "last_name_english": {
+                      "type": "string",
+                      "example": "sidsaina"
+                    },
+                    "nationality_id": {
+                      "type": "int",
+                      "example": 1
+                    },
+                    "ethnicity_id": {
+                      "type": "int",
+                      "example": 1
+                    },
+                    "religion_id": {
+                      "type": "int",
+                      "example": 1
+                    },
+                    "gender_id": {
+                      "type": "int",
+                      "example": 1
+                    },
+                    "national_id": {
+                      "type": "string",
+                      "example": "1234567891234"
+                    },
+                    "date_of_birth": {
+                      "type": "date",
+                      "example": "1996-11-10"
+                    },
+                    "phone_number": {
+                      "type": "string",
+                      "example": "0871234561"
+                    },
+                    "email": {
+                      "type": "string",
+                      "example": "teacher@gmail.com"
+                    },
+                    "house_number": {
+                      "type": "string",
+                      "example": "13"
+                    },
+                    "village_group": {
+                      "type": "string",
+                      "example": "13"
+                    },
+                    "sub_district_id": {
+                      "type": "int",
+                      "example": 3908
+                    },
+                    "district_id": {
+                      "type": "int",
+                      "example": 493
+                    },
+                    "province_id": {
+                      "type": "int",
+                      "example": 36
+                    },
+                    "education_level_id": {
+                      "type": "int",
+                      "example": 1
+                    },
+                    "specialization_id": {
+                      "type": "int",
+                      "example": 1
+                    },
+                    "educational_institution_id": {
+                      "type": "int",
+                      "example": 1
+                    },
+                    "position_id": {
+                      "type": "int",
+                      "example": 1
+                    },
+                    "image": {
+                      "type": "blob",
+                      "example": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/wcAAgAB/1h1ZAAAAABJRU5ErkJggg==" 
+                    },
+                    "teacher_status_id": {
+                      "type": "int",
+                      "example": 1
+                    }
+                  },
+                  "required": [
+                    "prefix_id",
+                    "first_name_thai",
+                    "last_name_thai",
+                    "first_name_english",
+                    "last_name_english",
+                    "nationality_id",
+                    "ethnicity_id",
+                    "religion_id",
+                    "gender_id",
+                    "national_id",
+                    "date_of_birth",
+                    "phone_number",
+                    "email",
+                    "house_number",
+                    "village_group",
+                    "sub_district_id",
+                    "district_id",
+                    "province_id",
+                    "education_level_id",
+                    "specialization_id",
+                    "educational_institution_id",
+                    "position_id",
+                    "image",
+                    "teacher_status_id"
+                  ]
+                }
+              }
+            }
+          },
+          "responses": {
+            "200": {
+              "description": "ความสำเร็จทั่วไป",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "object",
+                    "properties": {
+                      "message": {
+                        "type": "string",
+                        "example": "Update teacher successfully!"
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "400": {
+              "description": "ข้อมูลจาก Client ไม่ถูกต้อง",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "object",
+                    "properties": {
+                      "message": {
+                        "type": "string",
+                        "example": "Tokenไม่อนุญาติให้ใช้งาน!"
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "401": {
+              "description": "การรับรองความถูกต้องล้มเหลว",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "object",
+                    "properties": {
+                      "message": {
+                        "type": "string",
+                        "example": "ไม่มีการยืนยันตัวตนด้วย OTP กรุณายืนยันตัวตนก่อนใช้งานระบบ! || Token ไม่ถูกต้อง! || Token นี้ไม่มีสิทธิ์การใช้งาน! || TokenExpiredError! || JsonWebTokenError!"
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "404": {
+              "description": "Resource ไม่พบ( Not found )",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "object",
+                    "properties": {
+                      "message": {
+                        "type": "string",
+                        "example": "ไม่มีข้อมูลอาจารย์!"
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "409": {
+              "description": "คำร้องขอไม่สามารถดำเนินการได้เนื่องจากขัดแย้งกับสถานะปัจจุบันของทรัพยากรที่ต้องการอัพเดท",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "object",
+                    "properties": {
+                      "message": {
+                        "type": "string",
+                        "example": "( ${value} ) มีข้อมูลในระบบแล้ว ไม่อนุญาตให้บันทึกข้อมูลซ้ำ!"
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "500": {
+              "description": "ข้อผิดพลาดเซิร์ฟเวอร์",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "object",
+                    "properties": {
+                      "message": {
+                        "type": "string",
+                        "example": "internal server errors"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "/apiv2/removerTeacher/{id}": {
+        "delete": {
+          "tags": [
+            "Teacher"
+          ],
+          "summary": "สำหรับลบข้อมูล Teacher",
+          "description": "สำหรับลบข้อมูลทั้งหมดของ Teacher",
+          "parameters": [
+            {
+              "name": "Authorization",
+              "in": "header",
+              "required": true,
+              "schema": {
+                "type": "string",
+                "example": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+              },
+              "description": "Token จากการล็อกอิน ส่งในรูปแบบ Bearer Token"
+            },
+            {
+              "name": "id",
+              "in": "path",
+              "required": true,
+              "schema": {
+                "type": "integer",
+                "example": 1
+              },
+              "description": "ID ของ Teacher ที่ต้องการลบ"
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "ความสำเร็จทั่วไป",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "object",
+                    "properties": {
+                      "message": {
+                        "type": "string",
+                        "example": "ลบข้อมูลเสร็จสิ้น!"
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "400": {
+              "description": "ข้อมูลจาก Client ไม่ถูกต้อง",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "object",
+                    "properties": {
+                      "message": {
+                        "type": "string",
+                        "example": "Tokenไม่อนุญาติให้ใช้งาน! || ไม่สามารถลบข้อมูลตัวเองได้!"
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "401": {
+              "description": "การรับรองความถูกต้องล้มเหลว",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "object",
+                    "properties": {
+                      "message": {
+                        "type": "string",
+                        "example": "ไม่มีการยืนยันตัวตนด้วย OTP กรุณายืนยันตัวตนก่อนใช้งานระบบ! || Token ไม่ถูกต้อง! || Token นี้ไม่มีสิทธิ์การใช้งาน! || TokenExpiredError! || JsonWebTokenError!"
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "404": {
+              "description": "Resource ไม่พบ( Not found )",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "object",
+                    "properties": {
+                      "message": {
+                        "type": "string",
+                        "example": "ไม่มี ( ${teacherId} ) อยู่ในระบบ!"
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "500": {
+              "description": "ข้อผิดพลาดเซิร์ฟเวอร์",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "object",
+                    "properties": {
+                      "message": {
+                        "type": "string",
+                        "example": "internal server errors"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "/apiv2/getAdmin": {
+        "get": {
+          "tags": [
+            "Admin"
+          ],
+          "summary": "สำหรับดึงข้อมูล Admin",
+          "description": "สำหรับดึงข้อมูลทั้งหมดของ Admin",
+          "parameters": [
+            {
+              "name": "Authorization",
+              "in": "header",
+              "required": true,
+              "schema": {
+                "type": "string",
+                "example": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+              },
+              "description": "Token จากการล็อกอิน ส่งในรูปแบบ Bearer Token"
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "ความสำเร็จทั่วไป",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "object",
+                    "properties": {
+                      "message": {
+                        "type": "array",
+                        "items": {
+                          "type": "object",
+                          "properties": {
+                            "id": {
+                              "type": "integer",
+                              "example": 1
+                            },
+                            "prefix_id": {
+                              "type": "int",
+                              "example": 1
+                            },
+                            "first_name_thai": {
+                              "type": "string",
+                              "example": "ดำสนิท"
+                            },
+                            "last_name_thai": {
+                              "type": "string",
+                              "example": "สิดส่ายหน้า"
+                            },
+                            "national_id": {
+                              "type": "string",
+                              "example": "1234567891234"
+                            },
+                            "date_of_birth": {
+                              "type": "date",
+                              "example": "1996-11-09T17:00:00.000Z"
+                            },
+                            "email": {
+                              "type": "string",
+                              "example": "student@gmail.com"
+                            },
+                            "image": {
+                              "type": "object",
+                              "data": {
+                                "type": "array",
+                                "example": 100
+                              }
+                            },
+                            "created_at": {
+                              "type": "timestamp",
+                              "example": "2025-03-06 21:34:25"
+                            },
+                            "created_by": {
+                              "type": "string",
+                              "example": "admin"
+                            },
+                            "updated_at": {
+                              "type": "timestamp",
+                              "example": "2025-03-06 21:34:25"
+                            },
+                            "updated_by": {
+                              "type": "string",
+                              "example": "admin"
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "400": {
+              "description": "Server ไม่สามารถประมวลผลคำร้องขอเนื่องจากข้อผิดพลาดของ Client",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "object",
+                    "properties": {
+                      "message": {
+                        "type": "string",
+                        "example": "Tokenไม่อนุญาติให้ใช้งาน!"
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "401": {
+              "description": "การรับรองความถูกต้องล้มเหลว",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "object",
+                    "properties": {
+                      "message": {
+                        "type": "string",
+                        "example": "ไม่มีการยืนยันตัวตนด้วย OTP กรุณายืนยันตัวตนก่อนใช้งานระบบ! || Token ไม่ถูกต้อง! || Token นี้ไม่มีสิทธิ์การใช้งาน! || TokenExpiredError! || JsonWebTokenError!"
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "404": {
+              "description": "Resource ไม่พบ",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "object",
+                    "properties": {
+                      "message": {
+                        "type": "string",
+                        "example": "No data found"
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "500": {
+              "description": "ข้อผิดพลาดเซิร์ฟเวอร์",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "object",
+                    "properties": {
+                      "message": {
+                        "type": "string",
+                        "example": "internal server errors"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "/apiv2/addAdmin": {
+        "post": {
+          "tags": [
+            "Admin"
+          ],
+          "summary": "สำหรับบันทึกข้อมูล Admin",
+          "description": "สำหรับบันทึกข้อมูลทั้งหมดของ Admin",
+          "parameters": [
+            {
+              "name": "Authorization",
+              "in": "header",
+              "required": true,
+              "schema": {
+                "type": "string",
+                "example": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+              },
+              "description": "Token จากการล็อกอิน ส่งในรูปแบบ Bearer Token"
+            }
+          ],
+          "requestBody": {
+            "required": true,
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "prefix_id": {
+                      "type": "int",
+                      "example": 1
+                    },
+                    "first_name_thai": {
+                      "type": "string",
+                      "example": "ดำสนิท"
+                    },
+                    "last_name_thai": {
+                      "type": "string",
+                      "example": "สิดส่ายหน้า"
+                    },
+                    "national_id": {
+                      "type": "string",
+                      "example": "1234567891234"
+                    },
+                    "date_of_birth": {
+                      "type": "date",
+                      "example": "1996-11-10"
+                    },
+                    "email": {
+                      "type": "string",
+                      "example": "teacher@gmail.com"
+                    },
+                    "image": {
+                      "type": "blob",
+                      "example": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/wcAAgAB/1h1ZAAAAABJRU5ErkJggg==" 
+                    }
+                  },
+                  "required": [
+                    "national_id",
+                    "email"
+                  ]
+                }
+              }
+            }
+          },
+          "responses": {
+            "200": {
+              "description": "ความสำเร็จทั่วไป",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "object",
+                    "properties": {
+                      "message": {
+                        "type": "string",
+                        "example": "Register admin successfully!"
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "400": {
+              "description": "ข้อมูลจาก Client ไม่ถูกต้อง",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "object",
+                    "properties": {
+                      "message": {
+                        "type": "string",
+                        "example": "Tokenไม่อนุญาติให้ใช้งาน!"
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "401": {
+              "description": "การรับรองความถูกต้องล้มเหลว",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "object",
+                    "properties": {
+                      "message": {
+                        "type": "string",
+                        "example": "ไม่มีการยืนยันตัวตนด้วย OTP กรุณายืนยันตัวตนก่อนใช้งานระบบ! || Token ไม่ถูกต้อง! || Token นี้ไม่มีสิทธิ์การใช้งาน! || TokenExpiredError! || JsonWebTokenError!"
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "409": {
+              "description": "คำร้องขอไม่สามารถดำเนินการได้เนื่องจากขัดแย้งกับสถานะปัจจุบันของทรัพยากรที่ต้องการอัพเดท",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "object",
+                    "properties": {
+                      "message": {
+                        "type": "string",
+                        "example": "( ${value} ) มีข้อมูลในระบบแล้ว ไม่อนุญาตให้บันทึกข้อมูลซ้ำ!"
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "500": {
+              "description": "ข้อผิดพลาดเซิร์ฟเวอร์",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "object",
+                    "properties": {
+                      "message": {
+                        "type": "string",
+                        "example": "internal server errors"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "/apiv2/updateAdmin/{id}": {
+        "put": {
+          "tags": [
+            "Admin"
+          ],
+          "summary": "สำหรับอัพเดทข้อมูล Admin",
+          "description": "สำหรับอัพเดทข้อมูลทั้งหมดของ Admin",
+          "parameters": [
+            {
+              "name": "Authorization",
+              "in": "header",
+              "required": true,
+              "schema": {
+                "type": "string",
+                "example": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+              },
+              "description": "Token จากการล็อกอิน ส่งในรูปแบบ Bearer Token"
+            },
+            {
+              "name": "id",
+              "in": "path",
+              "required": true,
+              "schema": {
+                "type": "integer",
+                "example": 1
+              },
+              "description": "ID ของ Admin ที่ต้องการอัพเดท"
+            }
+          ],
+          "requestBody": {
+            "required": true,
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "prefix_id": {
+                      "type": "int",
+                      "example": 1
+                    },
+                    "first_name_thai": {
+                      "type": "string",
+                      "example": "ดำสนิท"
+                    },
+                    "last_name_thai": {
+                      "type": "string",
+                      "example": "สิดส่ายหน้า"
+                    },
+                    "national_id": {
+                      "type": "string",
+                      "example": "1234567891234"
+                    },
+                    "date_of_birth": {
+                      "type": "date",
+                      "example": "1996-11-10"
+                    },
+                    "email": {
+                      "type": "string",
+                      "example": "teacher@gmail.com"
+                    },
+                    "image": {
+                      "type": "blob",
+                      "example": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/wcAAgAB/1h1ZAAAAABJRU5ErkJggg==" 
+                    }
+                  },
+                  "required": [
+                    "national_id",
+                    "email"
+                  ]
+                }
+              }
+            }
+          },
+          "responses": {
+            "200": {
+              "description": "ความสำเร็จทั่วไป",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "object",
+                    "properties": {
+                      "message": {
+                        "type": "string",
+                        "example": "Update admin successfully!"
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "400": {
+              "description": "ข้อมูลจาก Client ไม่ถูกต้อง",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "object",
+                    "properties": {
+                      "message": {
+                        "type": "string",
+                        "example": "Tokenไม่อนุญาติให้ใช้งาน!"
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "401": {
+              "description": "การรับรองความถูกต้องล้มเหลว",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "object",
+                    "properties": {
+                      "message": {
+                        "type": "string",
+                        "example": "ไม่มีการยืนยันตัวตนด้วย OTP กรุณายืนยันตัวตนก่อนใช้งานระบบ! || Token ไม่ถูกต้อง! || Token นี้ไม่มีสิทธิ์การใช้งาน! || TokenExpiredError! || JsonWebTokenError!"
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "404": {
+              "description": "Resource ไม่พบ( Not found )",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "object",
+                    "properties": {
+                      "message": {
+                        "type": "string",
+                        "example": "ไม่มีข้อมูลผู้ดูแลระบบ!"
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "409": {
+              "description": "คำร้องขอไม่สามารถดำเนินการได้เนื่องจากขัดแย้งกับสถานะปัจจุบันของทรัพยากรที่ต้องการอัพเดท",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "object",
+                    "properties": {
+                      "message": {
+                        "type": "string",
+                        "example": "( ${value} ) มีข้อมูลในระบบแล้ว ไม่อนุญาตให้บันทึกข้อมูลซ้ำ!"
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "500": {
+              "description": "ข้อผิดพลาดเซิร์ฟเวอร์",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "object",
+                    "properties": {
+                      "message": {
+                        "type": "string",
+                        "example": "internal server errors"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "/apiv2/removerAdmin/{id}": {
+        "delete": {
+          "tags": [
+            "Admin"
+          ],
+          "summary": "สำหรับลบข้อมูล Admin",
+          "description": "สำหรับลบข้อมูลทั้งหมดของ Admin",
+          "parameters": [
+            {
+              "name": "Authorization",
+              "in": "header",
+              "required": true,
+              "schema": {
+                "type": "string",
+                "example": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+              },
+              "description": "Token จากการล็อกอิน ส่งในรูปแบบ Bearer Token"
+            },
+            {
+              "name": "id",
+              "in": "path",
+              "required": true,
+              "schema": {
+                "type": "integer",
+                "example": 1
+              },
+              "description": "ID ของ Admin ที่ต้องการลบ"
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "ความสำเร็จทั่วไป",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "object",
+                    "properties": {
+                      "message": {
+                        "type": "string",
+                        "example": "ลบข้อมูลเสร็จสิ้น!"
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "400": {
+              "description": "ข้อมูลจาก Client ไม่ถูกต้อง",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "object",
+                    "properties": {
+                      "message": {
+                        "type": "string",
+                        "example": "Tokenไม่อนุญาติให้ใช้งาน! || ไม่สามารถลบข้อมูลตัวเองได้!"
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "401": {
+              "description": "การรับรองความถูกต้องล้มเหลว",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "object",
+                    "properties": {
+                      "message": {
+                        "type": "string",
+                        "example": "ไม่มีการยืนยันตัวตนด้วย OTP กรุณายืนยันตัวตนก่อนใช้งานระบบ! || Token ไม่ถูกต้อง! || Token นี้ไม่มีสิทธิ์การใช้งาน! || TokenExpiredError! || JsonWebTokenError!"
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "404": {
+              "description": "Resource ไม่พบ( Not found )",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "object",
+                    "properties": {
+                      "message": {
+                        "type": "string",
+                        "example": "ไม่มี ( ${adminId} ) อยู่ในระบบ!"
                       }
                     }
                   }

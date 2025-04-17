@@ -17,7 +17,7 @@ exports.getAlldataEducationLevel = async (req, res) => {
         if (!Array.isArray(fetchEducationLevelDataResult) || fetchEducationLevelDataResult.length === 0) {
             return msg(res, 404, "No data found");
         }
-        return msg(res, 200, 'getAlldataEducationLevel');
+        return msg(res, 200, fetchEducationLevelDataResult);
     } catch (error) {
         console.error("Error fetching education level data:", error.message);
         return msg(res, 500, "Internal Server Error");
@@ -108,4 +108,4 @@ exports.removeDataEducationLevel = async (req, res) => {
         console.log(err);
         return msg(res, 500, err);
     }
-}
+};

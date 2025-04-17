@@ -19,6 +19,9 @@ const { getAlldataReligions, addDataReligion, updateDataReligion, removeDataReli
 const { getAlldataSpecializations, addDataSpecialization, updateDataSpecialization, removeDataSpecialization } = require('../controllers/profileInformations/specializationController');
 const { getAlldataCourses, addDataCourses, updateDataCourses, removeDataCourses } = require('../controllers/profileInformations/coursesController');
 const { getAllDataEducationalInstitutions, addDataEducationalInstitution, updateDataEducationalInstitution, removeDataEducationalInstitution } = require('../controllers/profileInformations/educationalInstitutionController');
+const { getAllDataSubjectTypes, addDataSubjectType, updateDataSubjectType, removeDataSubjectType } = require('../controllers/profileInformations/subjectTypeController');
+const { getAllDataCareerGroup, addDataCareerGroup, updateDataCareerGroup, removeDataCareerGroup } = require('../controllers/profileInformations/careerGroupController');
+const { getAllDataFieldOfStudies, addDataFieldOfStudy, updateDataFieldOfStudy, removeDataFieldOfStudy } = require('../controllers/profileInformations/fieldOfStudyController');
 
 // @ENDPOINT = http://localhost:8000/apiv2/enrollmentYear { enrollmentYear }
 router.get('/getEnrollmentYear', authCheckAdmin, getAlldataEnrollmentYear);
@@ -128,5 +131,23 @@ router.get('/getEducationalInstitutions', authCheckAdmin, getAllDataEducationalI
 router.post('/addEducationalInstitution', authCheckAdmin, addDataEducationalInstitution);
 router.put('/updateEducationalInstitution/:id', authCheckAdmin, updateDataEducationalInstitution);
 router.delete('/removeEducationalInstitution/:id', authCheckAdmin, removeDataEducationalInstitution);
+
+// @ENDPOINT = http://localhost:8000/apiv2/SubjectType { SubjectType }
+router.get('/getSubjectTypes', authCheckAdmin, getAllDataSubjectTypes);
+router.post('/addSubjectType', authCheckAdmin, addDataSubjectType);
+router.put('/updateSubjectType/:id', authCheckAdmin, updateDataSubjectType);
+router.delete('/removeSubjectType/:id', authCheckAdmin, removeDataSubjectType);
+
+// @ENDPOINT = http://localhost:8000/apiv2/CareerGroup { CareerGroup }
+router.get('/getCareerGroup', authCheckAdmin, getAllDataCareerGroup);
+router.post('/addCareerGroup', authCheckAdmin, addDataCareerGroup);
+router.put('/updateCareerGroup/:id', authCheckAdmin, updateDataCareerGroup);
+router.delete('/removeCareerGroup/:id', authCheckAdmin, removeDataCareerGroup);
+
+// @ENDPOINT = http://localhost:8000/apiv2/FieldOfStudy { FieldOfStudy }
+router.get('/getFieldOfStudies', authCheckAdmin, getAllDataFieldOfStudies);
+router.post('/addFieldOfStudy', authCheckAdmin, addDataFieldOfStudy);
+router.put('/updateFieldOfStudy/:id', authCheckAdmin, updateDataFieldOfStudy);
+router.delete('/removeFieldOfStudy/:id', authCheckAdmin, removeDataFieldOfStudy);
 
 module.exports = router;

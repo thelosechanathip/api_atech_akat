@@ -20,6 +20,34 @@ exports.getAllDataStudents = async (req, res) => {
     }
 };
 
+exports.checkUniqueDataStudent = async (req, res) => {
+    try {
+        const studentData = req.body;
+        const deplicateStatus = [];
+        const duplicateMessages = [];
+
+        // Loop ตรวจสอบข้อมูลซ้ำ
+        await Promise.all(
+            Object.entries(studentData).map(async ([key, value]) => {
+                // ตรวจสอบค่าซ้ำเฉพาะฟิลด์สำคัญ
+                if (["national_id"].includes(key) || ["email"].includes(key) || ["student_code"].includes(key) && value) {
+                    const [rows] = await db.query(`SELECT * FROM students WHERE ${key} = ? LIMIT 1`, [value]);
+                    if (rows.length > 0) {
+                        deplicateStatus.push(409);
+                        duplicateMessages.push(`( ${value} ) มีข้อมูลในระบบแล้ว ไม่อนุญาตให้บันทึกข้อมูลซ้ำ!`);
+                    }
+                }
+            })
+        );
+
+        // ถ้ามีข้อมูลซ้ำ ให้แจ้งเตือน
+        if (duplicateMessages.length > 0) return msg(res, Math.max(...deplicateStatus), { message: duplicateMessages.join(" AND ") });
+    } catch (error) {
+        console.error("Error checkUniqueDataStudent:", error.message);
+        return msg(res, 500, "Internal Server Error");
+    }
+}
+
 // ใช้สำหรับบันทึกข้อมูล Student( ข้อมูลนักศึกษา )
 exports.registerDataStudent = async (req, res) => {
     try {

@@ -13,8 +13,25 @@ const {
     changeVerified,
     addBlackListToken
 } = require('../../models/accountInformations/authModel');
+const db = require('../../config/db');
 const { msg } = require('../../utils/message');
 const jwt = require('jsonwebtoken');
+
+// Fetch User
+exports.authGetAllDataUsers = async (req, res) => {
+    try {
+        const [rows] = await db.query("SELECT * FROM users");
+        
+        // Check ว่ามีข้อมูลใน Table หรือไม่?
+        if (rows.length === 0) {
+            return msg(res, 404, "No data found");
+        }
+        return msg(res, 200, rows);
+    } catch (error) {
+        console.error("Error authGetAllDataUsers:", error.message);
+        return msg(res, 500, "Internal Server Error");
+    }
+};
 
 // Register User
 exports.authRegister = async (req, res) => {
@@ -37,12 +54,21 @@ exports.authRegister = async (req, res) => {
 
         const addAuthUserDataResult = await addAuthUserData(req.body);
         if(addAuthUserDataResult) return msg(res, 200, 'บันทึกข้อมูลเสร็จสิ้น!');
-        // if(addAuthUserDataResult) return msg(res, 200, 'บันทึกข้อมูลเสร็จสิ้น');
     }  catch (error) {
         console.error("Error register data:", error.message);
         return msg(res, 500, "Internal Server Error");
     }
-}
+};
+
+// Edit User
+exports.updateDataUser = async (req, res) => {
+    try {
+
+    } catch (error) {
+        console.error("Error updateDataUser:", error.message);
+        return msg(res, 500, "Internal Server Error");
+    }
+};
 
 // Login User
 exports.authLogin = async (req, res) => {
@@ -78,7 +104,7 @@ exports.authLogin = async (req, res) => {
         console.error("Error login data:", error.message);
         return msg(res, 500, "Internal Server Error");
     }
-}
+};
 
 // Verify User
 exports.authVerify = async (req, res) => {
@@ -110,7 +136,7 @@ exports.authVerify = async (req, res) => {
         console.error('Error verifying token:', err);
         return msg(res, 500, false);
     }
-}
+};
 
 // Remove User
 exports.authRemoveUser = async (req, res) => {
@@ -129,7 +155,7 @@ exports.authRemoveUser = async (req, res) => {
         console.error("Error remove data:", error.message);
         return msg(res, 500, "Internal Server Error");
     }
-}
+};
 
 // Logout User
 exports.authLogout = async (req, res) => {
@@ -163,4 +189,4 @@ exports.authLogout = async (req, res) => {
             return msg(res, 500, "Internal Server Error");
         }
     } else return msg(res, 400, "Logout Failed!!");
-}
+};

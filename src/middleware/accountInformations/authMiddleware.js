@@ -73,13 +73,27 @@ exports.authCheckAdmin = async (req, res, next) => {
 
         const check = { checkType: false, data:[] };
 
-        const [checkAdmin] = await db.query('SELECT first_name_thai FROM admins WHERE id = ?', [decoded.userId]);
-        if(checkAdmin.length > 0 ) {
+        const [fetchDataUserNationalId] = await db.query('SELECT username FROM users WHERE id = ?', [decoded.userId]);
+
+        const [checkStudent] = await db.query('SELECT first_name_thai FROM students WHERE national_id = ?', [fetchDataUserNationalId[0].username]);
+        if(checkStudent.length > 0 ) {
             check.checkType = true;
-            check.data = checkAdmin;
+            check.data = checkStudent[0].first_name_thai;
         }
 
-        req.name = check.data[0].first_name_thai;
+        const [checkAdmin] = await db.query('SELECT first_name_thai FROM admins WHERE national_id = ?', [fetchDataUserNationalId[0].username]);
+        if(checkAdmin.length > 0 ) {
+            check.checkType = true;
+            check.data = checkAdmin[0].first_name_thai;
+        }
+
+        const [checkTeacher] = await db.query('SELECT first_name_thai FROM teachers WHERE national_id = ?', [fetchDataUserNationalId[0].username]);
+        if(checkTeacher.length > 0 ) {
+            check.checkType = true;
+            check.data = checkTeacher[0].first_name_thai;
+        }
+
+        req.name = check.data;
 
         next();
     } catch (err) {
