@@ -63,7 +63,7 @@ exports.authRegister = async (req, res) => {
 // Edit User
 exports.updateDataUser = async (req, res) => {
     try {
-
+        
     } catch (error) {
         console.error("Error updateDataUser:", error.message);
         return msg(res, 500, "Internal Server Error");
