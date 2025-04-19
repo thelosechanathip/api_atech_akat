@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const { authCheckToken, authCheckAdmin } = require('../middleware/accountInformations/authMiddleware.js');
 const { getAlldataRole, addDataRole, updateDataRole, removeDataRole } = require('../controllers/accountInformations/roleController');
-const { authGetAllDataUsers, authRegister, authLogin, authVerify, authRemoveUser, authLogout } = require('../controllers/accountInformations/authController');
+const { authGetAllDataUsers, authRegister, updateDataUser, authLogin, authVerify, authRemoveUser, authLogout } = require('../controllers/accountInformations/authController');
 
 // @ENDPOINT = http://localhost:5001/api/role
 router.get('/getRole', authCheckAdmin, getAlldataRole);
@@ -13,6 +13,7 @@ router.delete('/removeRole/:id', authCheckAdmin, removeDataRole);
 // @ENDPOINT = http://localhost:5000/apiv2/auth
 router.get('/authGetUsers', authCheckAdmin, authGetAllDataUsers);
 router.post('/authRegister', authRegister);
+router.put('/updateDataUser/:id', authCheckAdmin, updateDataUser);
 router.post('/authLogin', authLogin);
 router.post('/authVerify', authVerify);
 router.delete('/authRemoveUser/:id', authCheckAdmin, authRemoveUser);

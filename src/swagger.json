@@ -382,6 +382,167 @@
           }
         }
       },
+      "/apiv2/updateDataUser/{id}": {
+        "put": {
+          "tags": [
+            "Auth"
+          ],
+          "summary": "สำหรับอัพเดทข้อมูล User",
+          "description": "สำหรับอัพเดทข้อมูลทั้งหมดของ User",
+          "parameters": [
+            {
+              "name": "Authorization",
+              "in": "header",
+              "required": true,
+              "schema": {
+                "type": "string",
+                "example": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+              },
+              "description": "Token จากการล็อกอิน ส่งในรูปแบบ Bearer Token"
+            },
+            {
+              "name": "id",
+              "in": "path",
+              "required": true,
+              "schema": {
+                "type": "integer",
+                "example": 1
+              },
+              "description": "ID ของ User ที่ต้องการอัพเดท"
+            }
+          ],
+          "requestBody": {
+            "required": true,
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "password": {
+                      "type": "string",
+                      "example": "@Aa123456",
+                      "description": "ตัวเลข อักขระพิเศษ ภาษาอังกฤษตัวพิมพ์เล็ก-ใหญ่ อย่างน้อยรวมกัน 8 ตัว"
+                    },
+                    "enabled": {
+                      "type": "boolean",
+                      "example": "true || false",
+                      "description": "บ่งบอกว่า User เปิดใช้งานหรือไม่"
+                    },
+                    "role": {
+                      "type": "integer",
+                      "example": [ 1, 2 ],
+                      "description": "สิทธิ์การเข้าใช้งานบันทึกเป็นตัวเลขตาม ID ของ Table roles"
+                    }
+                  },
+                  "required": [
+                    "password",
+                    "enabled",
+                    "role"
+                  ]
+                }
+              }
+            }
+          },
+          "responses": {
+            "200": {
+              "description": "ความสำเร็จทั่วไป",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "object",
+                    "properties": {
+                      "message": {
+                        "type": "string",
+                        "example": "Update user successfully!"
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "400": {
+              "description": "ข้อมูลจาก Client ไม่ถูกต้อง",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "object",
+                    "properties": {
+                      "message": {
+                        "type": "string",
+                        "example": "Tokenไม่อนุญาติให้ใช้งาน! || รหัสผ่านต้องมีตัวอักษรอย่างน้อย 8 ตัวและมีอักขระพิเศษ ภาษาอังกฤษพิมพ์เล็ก-ใหญ่ รวมทั้งตัวเลข!"
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "401": {
+              "description": "การรับรองความถูกต้องล้มเหลว",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "object",
+                    "properties": {
+                      "message": {
+                        "type": "string",
+                        "example": "ไม่มีการยืนยันตัวตนด้วย OTP กรุณายืนยันตัวตนก่อนใช้งานระบบ! || Token ไม่ถูกต้อง! || Token นี้ไม่มีสิทธิ์การใช้งาน! || TokenExpiredError! || JsonWebTokenError!"
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "404": {
+              "description": "Resource ไม่พบ( Not found )",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "object",
+                    "properties": {
+                      "message": {
+                        "type": "string",
+                        "example": "ไม่มี (ข้อมูลสิทธิ์การใช้งาน) อยู่ในระบบ!"
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "409": {
+              "description": "สร้างข้อมูลที่ซ้ำกัน",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "object",
+                    "properties": {
+                      "message": {
+                        "type": "string",
+                        "example": "มี (ข้อมูล (role_name) สิทธิ์การใช้งาน) อยู่ในระบบแล้ว ไม่อนุญาตให้บันทึกข้อมูลซ้ำ! || มี (ข้อมูล (description) สิทธิ์การใช้งาน) อยู่ในระบบแล้ว ไม่อนุญาตให้บันทึกข้อมูลซ้ำ!"
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "500": {
+              "description": "ข้อผิดพลาดเซิร์ฟเวอร์",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "object",
+                    "properties": {
+                      "message": {
+                        "type": "string",
+                        "example": "internal server errors"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
       "/apiv2/authLogin": {
         "post": {
           "tags": [
@@ -650,6 +811,127 @@
                       "message": {
                         "type": "string",
                         "example": "false"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "/apiv2/authRemoveUser/{id}": {
+        "delete": {
+          "tags": [
+            "Auth"
+          ],
+          "summary": "สำหรับลบข้อมูล User",
+          "description": "สำหรับลบข้อมูลทั้งหมดของ User",
+          "parameters": [
+            {
+              "name": "Authorization",
+              "in": "header",
+              "required": true,
+              "schema": {
+                "type": "string",
+                "example": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+              },
+              "description": "Token จากการล็อกอิน ส่งในรูปแบบ Bearer Token"
+            },
+            {
+              "name": "id",
+              "in": "path",
+              "required": true,
+              "schema": {
+                "type": "integer",
+                "example": 1
+              },
+              "description": "ID ของ User ที่ต้องการลบ"
+            }
+          ],
+          "requestBody": {
+            "required": true,
+            "content": {
+              "application/json": {
+                
+              }
+            }
+          },
+          "responses": {
+            "200": {
+              "description": "ความสำเร็จทั่วไป",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "object",
+                    "properties": {
+                      "message": {
+                        "type": "string",
+                        "example": "ลบข้อมูลเสร็จสิ้น!"
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "400": {
+              "description": "ข้อมูลจาก Client ไม่ถูกต้อง",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "object",
+                    "properties": {
+                      "message": {
+                        "type": "string",
+                        "example": "Tokenไม่อนุญาติให้ใช้งาน! || ไม่สามารถ remove user ตัวเองได้!!"
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "401": {
+              "description": "การรับรองความถูกต้องล้มเหลว",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "object",
+                    "properties": {
+                      "message": {
+                        "type": "string",
+                        "example": "ไม่มีการยืนยันตัวตนด้วย OTP กรุณายืนยันตัวตนก่อนใช้งานระบบ! || Token ไม่ถูกต้อง! || Token นี้ไม่มีสิทธิ์การใช้งาน! || TokenExpiredError! || JsonWebTokenError!"
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "404": {
+              "description": "Resource ไม่พบ( Not found )",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "object",
+                    "properties": {
+                      "message": {
+                        "type": "string",
+                        "example": "ไม่มี User นี้ในระบบ กรุณาตรวจสอบ!!"
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "500": {
+              "description": "ข้อผิดพลาดเซิร์ฟเวอร์",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "object",
+                    "properties": {
+                      "message": {
+                        "type": "string",
+                        "example": "internal server errors"
                       }
                     }
                   }
