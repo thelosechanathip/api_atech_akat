@@ -20,6 +20,7 @@ exports.getAllDataStudents = async (req, res) => {
     }
 };
 
+// ใช้สำหรับ Check ข้อมูล
 exports.checkUniqueDataStudent = async (req, res) => {
     try {
         const studentData = req.body;
@@ -42,11 +43,13 @@ exports.checkUniqueDataStudent = async (req, res) => {
 
         // ถ้ามีข้อมูลซ้ำ ให้แจ้งเตือน
         if (duplicateMessages.length > 0) return msg(res, Math.max(...deplicateStatus), { message: duplicateMessages.join(" AND ") });
+
+        return msg(res, 200, true);
     } catch (error) {
         console.error("Error checkUniqueDataStudent:", error.message);
         return msg(res, 500, "Internal Server Error");
     }
-}
+};
 
 // ใช้สำหรับบันทึกข้อมูล Student( ข้อมูลนักศึกษา )
 exports.registerDataStudent = async (req, res) => {

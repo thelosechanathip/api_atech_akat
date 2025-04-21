@@ -20,6 +20,37 @@ exports.getAllDataAdmin = async (req, res) => {
     }
 };
 
+// ใช้สำหรับ Check ข้อมูล
+exports.checkUniqueDataAdmin = async (req, res) => {
+    try {
+        const adminData = req.body;
+        const deplicateStatus = [];
+        const duplicateMessages = [];
+
+        // Loop ตรวจสอบข้อมูลซ้ำ
+        await Promise.all(
+            Object.entries(adminData).map(async ([key, value]) => {
+                // ตรวจสอบค่าซ้ำเฉพาะฟิลด์สำคัญ
+                if (["national_id"].includes(key) || ["email"].includes(key) && value) {
+                    const [rows] = await db.query(`SELECT * FROM admins WHERE ${key} = ? LIMIT 1`, [value]);
+                    if (rows.length > 0) {
+                        deplicateStatus.push(409);
+                        duplicateMessages.push(`( ${value} ) มีข้อมูลในระบบแล้ว ไม่อนุญาตให้บันทึกข้อมูลซ้ำ!`);
+                    }
+                }
+            })
+        );
+
+        // ถ้ามีข้อมูลซ้ำ ให้แจ้งเตือน
+        if (duplicateMessages.length > 0) return msg(res, Math.max(...deplicateStatus), { message: duplicateMessages.join(" AND ") });
+
+        return msg(res, 200, true);
+    } catch (error) {
+        console.error("Error checkUniqueDataAdmin:", error.message);
+        return msg(res, 500, "Internal Server Error");
+    }
+};
+
 // ใช้สำหรับเพิ่มข้อมูล Admin (ข้อมูลผู้ดูแลระบบ)
 exports.addDataAdmin = async (req, res) => {
     try {
