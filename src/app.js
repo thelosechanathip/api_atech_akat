@@ -68,10 +68,6 @@ if (fs.existsSync(routesPath)) {
 async function checkBlackListTokensExpired() {
   try {
     const [fetchAllBlackListTokensResult] = await db.query('SELECT token, expires_at FROM token_blacklist');
-    if (fetchAllBlackListTokensResult.length === 0) {
-      console.log('BlackListTokenErrors : No tokens found in database');
-    }
-
     for(const blackListTokens of fetchAllBlackListTokensResult) {
       const expiresAtIso = blackListTokens.expires_at;
       const expiresAt = moment(expiresAtIso).format('YYYY-MM-DD HH:mm:ss');
@@ -89,7 +85,6 @@ async function checkBlackListTokensExpired() {
 
           // รีเซ็ตค่า AUTO_INCREMENT
           await db.query('ALTER TABLE token_blacklist AUTO_INCREMENT = ?', [nextAutoIncrement]);
-          console.log('Remove Token BlackListTokens ที่หมดเวลาเสร็จสิ้น!!');
         }
       }
     }
@@ -103,10 +98,6 @@ async function checkBlackListTokensExpired() {
 async function checkAuthTokensExpired() {
   try {
     const [fetchAllAuthTokensResult] = await db.query('SELECT token, expires_at, is_active FROM auth_tokens');
-    if (fetchAllAuthTokensResult.length === 0) {
-        console.log('AuthTokenErrors : No tokens found in database');
-    }
-
     for(const authTokens of fetchAllAuthTokensResult) {
       const expiresAtIso = authTokens.expires_at;
       const expiresAt = moment(expiresAtIso).format('YYYY-MM-DD HH:mm:ss');
@@ -125,7 +116,6 @@ async function checkAuthTokensExpired() {
 
           // รีเซ็ตค่า AUTO_INCREMENT
           await db.query('ALTER TABLE auth_tokens AUTO_INCREMENT = ?', [nextAutoIncrement]);
-          console.log('Remove Token AuthTokens ที่หมดเวลาเสร็จสิ้น!!');
         }
       }
     }     
@@ -143,7 +133,6 @@ function startBlacklistScheduler() {
 
   // ตั้งตารางทุก 1 นาที
   schedule.scheduleJob('0 * * * *', async () => {
-      console.log('Scheduled blacklist update starting...');
       await checkAuthTokensExpired();
       await checkBlackListTokensExpired();
   });

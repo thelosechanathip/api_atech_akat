@@ -6,7 +6,6 @@ const PORT = process.env.PORT || 8000;
 async function testDatabaseConnection() {
   try {
     await db.query("SELECT 1"); // ทดสอบ query ง่ายๆ
-    // console.log("Database connected successfully");
   } catch (error) {
     console.error("Error connecting to the database:", error.message);
     process.exit(1); // หยุดการทำงานของเซิร์ฟเวอร์หากไม่สามารถเชื่อมต่อฐานข้อมูลได้
@@ -16,13 +15,6 @@ async function testDatabaseConnection() {
 // ทดสอบการเชื่อมต่อฐานข้อมูลก่อนเริ่มเซิร์ฟเวอร์
 testDatabaseConnection().then(() => {
   app.listen(PORT, () => {
-    // await db.query(
-    //   `
-    //     UPDATE auth_tokens
-    //     SET 
-    //       is_active = ?
-    //   `,[false]
-    // );
     console.log(`Server is running on port ${PORT}`);
   });
 });
