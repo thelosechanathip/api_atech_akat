@@ -2,6 +2,7 @@ const db = require('../../config/db');
 const { msg } = require('../../utils/message');
 const jwt = require('jsonwebtoken');
 
+// Check Token ของสิทธิ์ทั่วไป
 exports.authCheckToken = async (req, res, next) => {
     const authHeader = req.headers.authorization;
 
@@ -32,8 +33,9 @@ exports.authCheckToken = async (req, res, next) => {
         console.error('Error verifying token:', err);
         return msg(res, 500, 'Internal Server Error');
     }
-}
+};
 
+// Check Token ของสิทธิ์ Admin
 exports.authCheckAdmin = async (req, res, next) => {
     const authHeader = req.headers.authorization;
 
@@ -105,4 +107,4 @@ exports.authCheckAdmin = async (req, res, next) => {
         console.error('Error verifying token:', err);
         return msg(res, 500, 'Internal Server Error');
     }
-}
+};
