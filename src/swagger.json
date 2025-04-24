@@ -2140,7 +2140,7 @@
         }
       },
       "/apiv2/getDistrictByProvinceId/{id}": {
-        "post": {
+        "get": {
           "tags": [
             "District"
           ],
@@ -2856,7 +2856,7 @@
         }
       },
       "/apiv2/getSubDistrictByDistrictId/{id}": {
-        "post": {
+        "get": {
           "tags": [
             "SubDistrict"
           ],
